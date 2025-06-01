@@ -1,0 +1,10 @@
+@{
+    ViewData["Title"] = "Success";
+    var type = ViewBag.Type as string;
+}
+<div class="container text-center mt-5">
+    <h2>
+        @(type == "artwork" ? "Thank you for your upload!" : "Thank you for your music upload!")
+    </h2>
+    <a href="@Url.Action("Index", "Browse")" class="btn btn-primary mt-4">Browse More Artwork</a>
+</div> 

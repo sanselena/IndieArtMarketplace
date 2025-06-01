@@ -1,0 +1,106 @@
+@model IndieArtMarketplace.Models.User
+@{
+    ViewData["Title"] = "Profile";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <!-- User Info Card -->
+        <div class="col-md-4">
+            <div class="card bg-dark text-light border-primary mb-4">
+                <div class="card-body">
+                    <h3 class="card-title">@Model.Username</h3>
+                    <p class="card-text">@Model.Email</p>
+                    <p class="card-text">Role: @Model.Role</p>
+                    <p class="card-text">Member since: @Model.RegistrationDate.ToString("MMMM dd, yyyy")</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-8">
+            <!-- Uploaded Artwork Section -->
+            <div class="card bg-dark text-light border-primary mb-4">
+                <div class="card-header">
+                    <h4>My Artwork</h4>
+                </div>
+                <div class="card-body">
+                    @if (ViewBag.Artworks != null && ViewBag.Artworks.Count > 0)
+                    {
+                        <div class="row">
+                            @foreach (var artwork in ViewBag.Artworks)
+                            {
+                                <div class="col-md-6 mb-3">
+                                    <div class="card bg-dark text-light border-primary">
+                                        <img src="@artwork.FileURL" class="card-img-top" alt="@artwork.Title">
+                                        <div class="card-body">
+                                            <h5 class="card-title">@artwork.Title</h5>
+                                            <p class="card-text">@artwork.Description</p>
+                                            <p class="card-text">Price: $@artwork.Price</p>
+                                            <p class="card-text">License: @artwork.License</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <p>No artwork uploaded yet.</p>
+                    }
+                </div>
+            </div>
+
+            <!-- Purchase History Section -->
+            <div class="card bg-dark text-light border-primary">
+                <div class="card-header">
+                    <h4>Purchase History</h4>
+                </div>
+                <div class="card-body">
+                    @if (ViewBag.Transactions != null && ViewBag.Transactions.Count > 0)
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-dark table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Item</th>
+                                        <th>Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var transaction in ViewBag.Transactions)
+                                    {
+                                        <tr>
+                                            <td>@transaction.PurchaseDate.ToString("MMMM dd, yyyy")</td>
+                                            <td>
+                                                @if (transaction.ArtworkID != null)
+                                                {
+                                                    <span>Artwork</span>
+                                                }
+                                                else if (transaction.TrackID != null)
+                                                {
+                                                    <span>Music Track</span>
+                                                }
+                                            </td>
+                                            <td>$@transaction.Amount</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <p>No purchase history available.</p>
+                    }
+                </div>
+            </div>
+
+            @* Add Sign Out Button *@
+            <div class="mt-4 text-center">
+                <a href="@Url.Action("Logout", "User")" class="btn btn-danger">Sign Out</a>
+            </div>
+        </div>
+    </div>
+</div> 

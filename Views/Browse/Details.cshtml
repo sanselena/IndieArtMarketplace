@@ -1,0 +1,75 @@
+@model object
+@using IndieArtMarketplace.Models
+@{
+    ViewData["Title"] = "Details";
+    var isArtwork = Model is Artwork;
+    var artwork = isArtwork ? (Artwork)Model : null;
+    var music = !isArtwork ? (MusicTrack)Model : null;
+}
+<div class="container mt-4 text-light">
+    <h2>@(isArtwork ? artwork.Title : music.Title)</h2>
+    <p>@(isArtwork ? artwork.Description : music.Description)</p>
+    <p><strong>Price:</strong> $@(isArtwork ? artwork.Price : music.Price)</p>
+    <p><strong>Artist:</strong> @ViewBag.ArtistName</p>
+    <p><strong>License:</strong> @(isArtwork ? artwork.License : music.License)</p>
+    @if (isArtwork && !string.IsNullOrEmpty(artwork.FileURL))
+    {
+        <img src="@artwork.FileURL" alt="Artwork Image" class="img-fluid mb-3" style="max-width:400px;" />
+    }
+    @if (!isArtwork && !string.IsNullOrEmpty(music.FileURL))
+    {
+        <audio controls class="mb-3">
+            <source src="@music.FileURL" type="audio/mpeg" />
+            Your browser does not support the audio element.
+        </audio>
+    }
+
+    @* Add new buttons and text divs here *@
+    <div class="mt-4">
+        <button class="btn btn-outline-primary me-2" onclick="toggleCommissionText()">Commission</button>
+        <button class="btn btn-outline-primary" onclick="toggleHelpText()">Help your fellow Artist</button>
+        @* Add Buy button *@
+        <a href="@Url.Action("Purchase", new { id = isArtwork ? artwork.ArtworkID : music.TrackID, type = isArtwork ? "art" : "music" })" class="btn btn-primary mt-3 w-100">Buy Now</a>
+    </div>
+
+    <div id="commissionText" style="display: none;" class="alert alert-info mt-3 custom-alert-text">
+        here's the description of how commissions work EDIT THIS
+    </div>
+
+    <div id="helpText" style="display: none;" class="alert alert-info mt-3 custom-alert-text">
+        here's the description of how to bagista bulunmak EDIT THIS
+    </div>
+
+</div>
+<a href="@Url.Action("Index", "Browse")" class="btn btn-primary mt-4 w-100">Back to Browse</a> 
+
+@section Scripts {
+    <script>
+        function toggleCommissionText() {
+            var commissionDiv = document.getElementById('commissionText');
+            if (commissionDiv.style.display === 'none') {
+                commissionDiv.style.display = 'block';
+                document.getElementById('helpText').style.display = 'none'; // Hide other text
+            } else {
+                commissionDiv.style.display = 'none';
+            }
+        }
+
+        function toggleHelpText() {
+            var helpDiv = document.getElementById('helpText');
+            if (helpDiv.style.display === 'none') {
+                helpDiv.style.display = 'block';
+                document.getElementById('commissionText').style.display = 'none'; // Hide other text
+            } else {
+                helpDiv.style.display = 'none';
+            }
+        }
+    </script>
+}
+
+<style>
+    /* Style for alert text to be white */
+    .custom-alert-text {
+        color: white !important;
+    }
+</style> 

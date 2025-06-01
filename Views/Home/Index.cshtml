@@ -1,0 +1,78 @@
+﻿@{
+    ViewData["Title"] = "Home";
+}
+<div class="container-fluid min-vh-100 d-flex align-items-center" style="padding-left: 5vw;">
+    <div class="row w-100">
+        <div class="col-md-6 d-flex flex-column justify-content-center" style="min-height: 70vh;">
+            <div>
+                <span style="display:inline-block;width:24px;height:24px;background:linear-gradient(135deg,#fff,#a700ff,#ff3ec8);border-radius:4px;opacity:0.7;margin-bottom:2rem;"></span>
+                <h1 class="display-2 mb-2" style="font-family:'Space Mono','Montserrat',monospace,sans-serif;letter-spacing:4px;font-weight:700;">Welcome to Indie Art Marketplace</h1>
+                <h4 class="mb-5" style="font-family:'Montserrat',sans-serif;letter-spacing:2px;font-weight:400;opacity:0.8;">SOFTWARE AND APP DEVELOPMENT</h4>
+                <div class="d-flex flex-wrap mb-2">
+                    <a href="/Browse" class="btn btn-primary me-3">Browse</a>
+                    <a href="/User/Login" class="btn btn-primary">Sign Up</a>
+                </div>
+            </div>
+            <div class="social-icon mt-5">
+                <i class="fab fa-instagram"></i> @@reallygreatsite
+            </div>
+        </div>
+        <div class="col-md-6 d-none d-md-block">
+            <img src="~/images/02-blur.png" alt="Artwork 1" class="fade-in-image blur-image">
+            <img src="~/images/02-raiden.png" alt="Artwork 2" class="fade-in-image raiden-image">
+        </div>
+    </div>
+</div>
+
+<style>
+    .fade-in-image {
+        opacity: 0;
+        animation: fadeIn 1.5s ease-in forwards;
+        display: block;
+        max-width: 50vw;
+        height: auto;
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        pointer-events: none;
+    }
+
+    .blur-image {
+        z-index: 1;
+    }
+
+    .raiden-image {
+        animation-delay: 0.5s;
+        z-index: 2;
+    }
+
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .col-md-6 {
+        position: static;
+        min-height: auto;
+        overflow: visible;
+    }
+
+    main.pb-3 {
+        padding-bottom: 200px;
+    }
+
+    @@media (max-width: 768px) {
+        .fade-in-image {
+            max-width: 80vw;
+        }
+        main.pb-3 {
+             padding-bottom: 100px;
+        }
+    }
+</style>

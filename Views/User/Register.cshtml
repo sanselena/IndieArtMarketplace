@@ -1,0 +1,12 @@
+﻿@model IndieArtMarketplace.Models.User
+<h2>Sign Up</h2>
+<form asp-action="Register">
+    <input asp-for="Username" placeholder="Username" />
+    <input asp-for="Email" placeholder="Email" />
+    <input asp-for="Password" type="password" placeholder="Password" />
+    <select asp-for="Role">
+        <option value="Artist">Artist</option>
+        <option value="Buyer">Buyer</option>
+    </select>
+    <button type="submit">Sign Up</button>
+</form>

@@ -1,0 +1,413 @@
+body, html {
+    min-height: 100vh;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Space Mono', 'Montserrat', 'Fira Mono', monospace, sans-serif;
+    background: radial-gradient(ellipse at 70% 60%, #a700ff 0%, #1a1a1a 60%, #000 100%);
+    color: #fff;
+}
+
+:root {
+    --primary-color: #a700ff;
+    --primary-hover: #ff3ec8;
+    --secondary-color: #1a1a1a;
+    --text-color: #fff;
+    --background-color: #1a1a1a;
+    --card-background: #2d2d2d;
+    --border-color: #404040;
+    --button-bg: #2d2d2d;
+    --footer-text: #666;
+    --button-border: #a700ff;
+    --button-hover: #ff3ec8;
+}
+
+html {
+    font-size: 14px;
+    position: relative;
+    min-height: 100%;
+    background-color: var(--background-color);
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+body {
+    margin-bottom: 60px;
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+/* Navbar styling */
+.navbar {
+    background: transparent !important;
+    box-shadow: none;
+    border: none;
+    padding: 1.5rem 0 0.5rem 0;
+}
+
+.navbar-brand, .nav-link {
+    color: var(--primary-color) !important;
+    font-family: 'Space Mono', 'Montserrat', monospace, sans-serif;
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.nav-link:hover, .nav-link.active {
+    color: var(--primary-hover) !important;
+    text-shadow: 0 0 8px var(--primary-color);
+}
+
+/* Card styling */
+.card, .card-body {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.card-title {
+    color: #fff;
+    font-family: 'Space Mono', 'Montserrat', monospace, sans-serif;
+    font-size: 2.2rem;
+    letter-spacing: 2px;
+    margin-bottom: 0.5rem;
+    margin-top: 0.5rem;
+    text-align: left;
+}
+
+.card-text, .lead {
+    color: #fff;
+    font-size: 1.1rem;
+    opacity: 0.85;
+    text-align: left;
+}
+
+/* Button styling */
+.btn-primary, .btn-outline-primary {
+    background: transparent !important;
+    color: var(--primary-color) !important;
+    border: 2px solid var(--button-border) !important;
+    border-radius: 0.25rem;
+    font-family: 'Space Mono', 'Montserrat', monospace, sans-serif;
+    font-size: 1rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 0.75rem 2.5rem 0.75rem 1.5rem;
+    margin: 0.5rem 1rem 0.5rem 0;
+    position: relative;
+    transition: border-color 0.2s, color 0.2s;
+}
+
+.btn-primary::after, .btn-outline-primary::after {
+    content: '\2192';
+    position: absolute;
+    right: 1.2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--primary-color);
+    font-size: 1.2em;
+    transition: color 0.2s;
+}
+
+.btn-primary:hover, .btn-outline-primary:hover {
+    border-color: var(--button-hover) !important;
+    color: var(--button-hover) !important;
+}
+
+.btn-primary:hover::after, .btn-outline-primary:hover::after {
+    color: var(--button-hover);
+}
+
+/* Form styling */
+.form-control {
+    background-color: var(--card-background);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+}
+
+    .form-control:focus {
+        background-color: var(--card-background);
+        border-color: var(--primary-color);
+        color: var(--text-color);
+        box-shadow: 0 0 0 0.25rem rgba(111, 66, 193, 0.25);
+    }
+
+/* Footer styling */
+.footer {
+    background: transparent !important;
+    color: var(--footer-text);
+    border: none;
+    font-size: 0.95rem;
+    text-align: left;
+    padding: 1rem 2rem;
+}
+
+/* Table styling */
+.table {
+    color: var(--text-color);
+}
+
+    .table thead th {
+        background-color: var(--secondary-color);
+        border-bottom: 2px solid var(--border-color);
+    }
+
+    .table td, .table th {
+        border-color: var(--border-color);
+    }
+
+/* Alert styling */
+.alert {
+    background-color: var(--card-background);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--background-color);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 4px;
+}
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: var(--primary-hover);
+    }
+
+/* Image hover effect */
+.artwork-image {
+    transition: transform 0.3s ease;
+}
+
+    .artwork-image:hover {
+        transform: scale(1.05);
+    }
+
+/* Price tag styling */
+.price-tag {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: bold;
+}
+
+/* Artist name styling */
+.artist-name {
+    color: var(--primary-color);
+    font-weight: bold;
+}
+
+/* Category badge styling */
+.category-badge {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 15px;
+    font-size: 0.875rem;
+}
+
+/* Search box styling */
+.search-box {
+    background-color: var(--card-background);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+}
+
+    .search-box:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.25rem rgba(111, 66, 193, 0.25);
+    }
+
+/* Pagination styling */
+.pagination .page-link {
+    background-color: var(--card-background);
+    border-color: var(--border-color);
+    color: var(--text-color);
+}
+
+    .pagination .page-link:hover {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+        color: white;
+    }
+
+.pagination .page-item.active .page-link {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+/* Modal styling */
+.modal-content {
+    background-color: var(--card-background);
+    border: 1px solid var(--border-color);
+}
+
+.modal-header {
+    border-bottom: 1px solid var(--border-color);
+}
+
+.modal-footer {
+    border-top: 1px solid var(--border-color);
+}
+
+/* Dropdown menu styling */
+.dropdown-menu {
+    background-color: var(--card-background);
+    border: 1px solid var(--border-color);
+}
+
+.dropdown-item {
+    color: var(--text-color);
+}
+
+    .dropdown-item:hover {
+        background-color: var(--primary-color);
+        color: white;
+    }
+
+/* Badge styling */
+.badge {
+    background-color: var(--primary-color);
+}
+
+/* Tooltip styling */
+.tooltip-inner {
+    background-color: var(--card-background);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+}
+
+/* Custom focus styles */
+:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* Custom selection color */
+::selection {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+/* Home page layout */
+.min-vh-75 {
+    min-height: 75vh;
+}
+
+.artwork-preview {
+    background-color: var(--card-background);
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.artwork-preview:hover {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 20px rgba(167, 0, 255, 0.2);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .artwork-preview {
+        height: 300px;
+        margin-top: 2rem;
+    }
+}
+
+/* Music player styling */
+.music-player-container {
+    background-color: var(--card-background);
+    border-radius: 8px;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+    position: relative;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.music-player-placeholder {
+    width: 100%;
+    height: 100%;
+    background-color: var(--button-bg);
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.music-player-placeholder::before {
+    color: var(--primary-color);
+    font-size: 3rem;
+}
+
+.music-player-controls {
+    position: absolute;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 1rem;
+    z-index: 2;
+}
+
+.music-player-controls button {
+    background-color: var(--button-bg);
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    backdrop-filter: blur(5px);
+}
+
+.music-player-controls button:hover {
+    background-color: var(--button-bg);
+    box-shadow: 0 0 15px rgba(167, 0, 255, 0.3);
+    transform: scale(1.1);
+}
+
+.custom-audio-player {
+    display: none;
+}
+
+/* Add Font Awesome for icons */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
+
+/* Social icon bottom left */
+.social-icon {
+    position: fixed;
+    left: 2rem;
+    bottom: 1.5rem;
+    color: var(--primary-color);
+    font-size: 1.2rem;
+    opacity: 0.8;
+}

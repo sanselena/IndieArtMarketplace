@@ -1,0 +1,91 @@
+@model IEnumerable<(object Product, string ArtistName)>
+@using IndieArtMarketplace.Models
+@{
+    ViewData["Title"] = "Browse";
+}
+
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col">
+            <h2>Browse Artwork & Music</h2>
+        </div>
+        <div class="col-auto">
+            <div class="btn-group">
+                <a href="@Url.Action("Index", new { type = "art" })" class="btn btn-outline-primary">Artwork</a>
+                <a href="@Url.Action("Index", new { type = "music" })" class="btn btn-outline-primary">Music</a>
+            </div>
+        </div>
+        <div class="col-auto">
+            <form class="d-flex" method="get">
+                <input class="form-control me-2 bg-dark text-light border-primary search-box" type="search" name="searchTerm" placeholder="Search...">
+                <button class="btn btn-primary" type="submit">Search</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+        @foreach (var tuple in Model)
+        {
+            var item = tuple.Product;
+            var artistName = tuple.ArtistName;
+            var isArtwork = item is Artwork;
+            var artwork = isArtwork ? (Artwork)item : null;
+            var music = !isArtwork ? (MusicTrack)item : null;
+            <div class="col">
+                <div class="card h-100 bg-dark text-light border-primary">
+                    @if (isArtwork)
+                    {
+                        <img src="@artwork.FileURL" class="card-img-top" alt="Artwork Image" style="max-height:200px;object-fit:cover;" />
+                    }
+                    else // Music Track
+                    {
+                        <img src="/images/default-music-artwork.png" class="card-img-top" alt="Default Music Image" style="max-height:200px;object-fit:cover;" asp-append-version="true" />
+                    }
+                    
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            @if (!isArtwork)
+                            {
+                                <i class="fas fa-music me-2"></i>
+                            }
+                            @(isArtwork ? artwork.Title : music.Title)
+                        </h5>
+                        <p class="card-text">
+                            <small class="text-muted">
+                                @(isArtwork ? "Artwork" : "Music Track")
+                            </small>
+                        </p>
+                        <p class="card-text">
+                            @if (isArtwork)
+                            {
+                                @artwork.Description
+                            }
+                            else
+                            {
+                                @music.Description
+                            }
+                        </p>
+                        <p class="card-text">
+                            <strong>Price: $@(isArtwork ? artwork.Price : music.Price)</strong>
+                        </p>
+                        <p class="card-text">
+                             <strong>Artist: @artistName</strong>
+                        </p>
+                         <p class="card-text">
+                             <strong>License: @(isArtwork ? artwork.License : music.License)</strong>
+                         </p>
+                        @if (!isArtwork)
+                        {
+                             <audio controls class="mb-3 w-100">
+                                 <source src="@music.FileURL" type="audio/mpeg" />
+                                 Your browser does not support the audio element.
+                             </audio>
+                        }
+                        <a href="@Url.Action("Details", new { id = isArtwork ? artwork.ArtworkID : music.TrackID, type = isArtwork ? "art" : "music" })" 
+                           class="btn btn-primary w-100">View Details</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div> 

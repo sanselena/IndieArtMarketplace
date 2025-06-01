@@ -1,0 +1,62 @@
+@{
+    ViewData["Title"] = "Sign In";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card" style="background: transparent; border: none;">
+            <div class="card-header" style="background: transparent; border: none;">
+                <ul class="nav nav-tabs card-header-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-bs-toggle="tab" href="#login">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#register">Register</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-body">
+                <div class="tab-content">
+                    <div class="tab-pane fade show active" id="login">
+                        @if (ViewBag.Error != null)
+                        {
+                            <div class="alert alert-danger">@ViewBag.Error</div>
+                        }
+                        <form asp-action="Login" method="post">
+                            <div class="mb-3">
+                                <label for="loginInput" class="form-label">Email or Username</label>
+                                <input type="text" class="form-control bg-dark text-light border-primary" id="loginInput" name="loginInput" required style="background-color: #181828; color: #fff; border: 1.5px solid #a700ff;">
+                            </div>
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Password</label>
+                                <input type="password" class="form-control bg-dark text-light border-primary" id="password" name="password" required style="background-color: #181828; color: #fff; border: 1.5px solid #a700ff;">
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Sign In</button>
+                        </form>
+                    </div>
+                    <div class="tab-pane fade" id="register">
+                        @if (ViewBag.Error != null)
+                        {
+                            <div class="alert alert-danger">@ViewBag.Error</div>
+                        }
+                        <form asp-action="Register" method="post">
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Name</label>
+                                <input type="text" class="form-control bg-dark text-light border-primary" id="name" name="name" required style="background-color: #181828; color: #fff; border: 1.5px solid #a700ff;">
+                            </div>
+                            <div class="mb-3">
+                                <label for="registerEmail" class="form-label">Email</label>
+                                <input type="email" class="form-control bg-dark text-light border-primary" id="registerEmail" name="email" required style="background-color: #181828; color: #fff; border: 1.5px solid #a700ff;">
+                            </div>
+                            <div class="mb-3">
+                                <label for="registerPassword" class="form-label">Password</label>
+                                <input type="password" class="form-control bg-dark text-light border-primary" id="registerPassword" name="password" required style="background-color: #181828; color: #fff; border: 1.5px solid #a700ff;">
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Register</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

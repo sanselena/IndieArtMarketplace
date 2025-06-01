@@ -1,0 +1,348 @@
+html, body {
+    background-color: var(--background-color) !important;
+}
+
+
+:root {
+    --primary-color: #a700ff;
+    --primary-hover: #8a00d4;
+    --secondary-color: #1a1a1a;
+    --text-color: #a700ff;
+    --background-color: #1a1a1a;
+    --card-background: #2d2d2d;
+    --border-color: #a700ff;
+    --button-bg: #2d2d2d;
+}
+
+html {
+    font-size: 14px;
+    position: relative;
+    min-height: 100%;
+    background-color: var(--background-color);
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+body {
+    margin-bottom: 60px;
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+/* Navbar styling */
+.navbar {
+    background-color: var(--secondary-color) !important;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.navbar-brand {
+    color: var(--primary-color) !important;
+    font-weight: bold;
+}
+
+.nav-link {
+    color: var(--text-color) !important;
+    transition: color 0.3s ease;
+}
+
+    .nav-link:hover {
+        color: var(--primary-color) !important;
+    }
+
+    .nav-link.active {
+        color: var(--primary-color) !important;
+        font-weight: bold;
+    }
+
+/* Card styling */
+.card {
+    background-color: var(--card-background);
+    border: 1px solid var(--border-color);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 15px rgba(111, 66, 193, 0.2);
+    }
+
+.card-title {
+    color: var(--primary-color);
+}
+
+/* Button styling */
+.btn-primary {
+    background-color: var(--button-bg);
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+}
+
+    .btn-primary:hover, .btn-primary:focus {
+        background-color: var(--primary-color) !important;
+        border-color: var(--primary-color) !important;
+        color: white !important;
+    }
+
+.btn-outline-primary {
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+    background-color: var(--button-bg);
+}
+
+    .btn-outline-primary:hover {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+        color: white;
+    }
+
+/* Form styling */
+.form-control {
+    background-color: var(--card-background);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+}
+
+    .form-control:focus {
+        background-color: var(--card-background);
+        border-color: var(--primary-color);
+        color: var(--text-color);
+        box-shadow: 0 0 0 0.25rem rgba(111, 66, 193, 0.25);
+    }
+
+/* Footer styling */
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px;
+    background: transparent;
+    color: var(--text-color);
+    border-top: 1px solid var(--border-color);
+}
+
+/* Table styling */
+.table {
+    color: var(--text-color);
+}
+
+    .table thead th {
+        background-color: var(--secondary-color);
+        border-bottom: 2px solid var(--border-color);
+    }
+
+    .table td, .table th {
+        border-color: var(--border-color);
+    }
+
+/* Alert styling */
+.alert {
+    background-color: var(--card-background);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--background-color);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 4px;
+}
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: var(--primary-hover);
+    }
+
+/* Image hover effect */
+.artwork-image {
+    transition: transform 0.3s ease;
+}
+
+    .artwork-image:hover {
+        transform: scale(1.05);
+    }
+
+/* Price tag styling */
+.price-tag {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: bold;
+}
+
+/* Artist name styling */
+.artist-name {
+    color: var(--primary-color);
+    font-weight: bold;
+}
+
+/* Category badge styling */
+.category-badge {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 15px;
+    font-size: 0.875rem;
+}
+
+/* Search box styling */
+.search-box {
+    background-color: var(--card-background);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+}
+
+    .search-box:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.25rem rgba(111, 66, 193, 0.25);
+    }
+
+/* Pagination styling */
+.pagination .page-link {
+    background-color: var(--card-background);
+    border-color: var(--border-color);
+    color: var(--text-color);
+}
+
+    .pagination .page-link:hover {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+        color: white;
+    }
+
+.pagination .page-item.active .page-link {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+/* Modal styling */
+.modal-content {
+    background-color: var(--card-background);
+    border: 1px solid var(--border-color);
+}
+
+.modal-header {
+    border-bottom: 1px solid var(--border-color);
+}
+
+.modal-footer {
+    border-top: 1px solid var(--border-color);
+}
+
+/* Dropdown menu styling */
+.dropdown-menu {
+    background-color: var(--card-background);
+    border: 1px solid var(--border-color);
+}
+
+.dropdown-item {
+    color: var(--text-color);
+}
+
+    .dropdown-item:hover {
+        background-color: var(--primary-color);
+        color: white;
+    }
+
+/* Badge styling */
+.badge {
+    background-color: var(--primary-color);
+}
+
+/* Tooltip styling */
+.tooltip-inner {
+    background-color: var(--card-background);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+}
+
+/* Custom focus styles */
+:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* Custom selection color */
+::selection {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+/* Home page layout */
+.min-vh-75 {
+    min-height: 75vh;
+}
+
+.artwork-preview {
+    background-color: var(--card-background);
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+    .artwork-preview:hover {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 20px rgba(167, 0, 255, 0.2);
+    }
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .artwork-preview {
+        height: 300px;
+        margin-top: 2rem;
+    }
+}
+
+/* Override Bootstrap border-primary to use violet */
+.border-primary {
+    border-color: var(--primary-color) !important;
+}
+
+/* Tab menu styling for nav-tabs */
+.nav-tabs {
+    border-bottom: 2px solid var(--primary-color) !important;
+}
+
+.nav-tabs .nav-link {
+    color: var(--primary-color) !important;
+    background-color: var(--button-bg) !important;
+    border: 1.5px solid var(--primary-color) !important;
+    border-bottom: none !important;
+    border-radius: 0.5rem 0.5rem 0 0 !important;
+    margin-right: 2px;
+    transition: background 0.2s, color 0.2s;
+}
+
+.nav-tabs .nav-link.active, .nav-tabs .nav-item.show .nav-link {
+    background-color: var(--primary-color) !important;
+    color: #fff !important;
+    border-color: var(--primary-color) var(--primary-color) var(--button-bg) !important;
+}
+
+/* Remove border radius for a modern look */
+.nav-tabs .nav-link, .nav-tabs {
+    border-radius: 0 !important;
+}
+
+/* Card and form border color update */
+.card, .form-control, .table, .alert {
+    border-color: var(--primary-color) !important;
+}
