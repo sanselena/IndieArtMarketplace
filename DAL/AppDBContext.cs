@@ -25,7 +25,8 @@ namespace IndieArtMarketplace.DAL
             // Configure User
             modelBuilder.Entity<User>(entity =>
             {
-                entity.HasKey(e => e.UserID).HasName("userid");
+                entity.HasKey(e => e.UserID);
+                entity.Property(e => e.UserID).HasColumnName("userid");
                 entity.Property(e => e.Username).IsRequired().HasColumnName("username");
                 entity.Property(e => e.Email).IsRequired().HasColumnName("email");
                 entity.Property(e => e.Password).IsRequired().HasColumnName("password");
@@ -36,9 +37,10 @@ namespace IndieArtMarketplace.DAL
             // Configure Artwork
             modelBuilder.Entity<Artwork>(entity =>
             {
-                entity.HasKey(e => e.ArtworkID).HasName("artworkid");
+                entity.HasKey(e => e.ArtworkID);
+                entity.Property(e => e.ArtworkID).HasColumnName("artworkid");
                 entity.Property(e => e.Title).IsRequired().HasColumnName("title");
-                entity.Property(e => e.Description).IsRequired().HasColumnName("description");
+                entity.Property(e => e.Description).HasColumnName("description");
                 entity.Property(e => e.Price).HasColumnType("decimal(10,2)").IsRequired().HasColumnName("price");
                 entity.Property(e => e.FileURL).IsRequired().HasColumnName("fileurl");
                 entity.Property(e => e.UploadDate).HasColumnName("uploaddate");
@@ -46,16 +48,16 @@ namespace IndieArtMarketplace.DAL
                 entity.Property(e => e.License).HasColumnName("license");
                 entity.HasOne<User>()
                     .WithMany()
-                    .HasForeignKey(e => e.ArtistID)
-                    .HasConstraintName("fk_artworks_users_artistid");
+                    .HasForeignKey(e => e.ArtistID);
             });
 
             // Configure MusicTrack
             modelBuilder.Entity<MusicTrack>(entity =>
             {
-                entity.HasKey(e => e.TrackID).HasName("trackid");
+                entity.HasKey(e => e.TrackID);
+                entity.Property(e => e.TrackID).HasColumnName("trackid");
                 entity.Property(e => e.Title).IsRequired().HasColumnName("title");
-                entity.Property(e => e.Description).IsRequired().HasColumnName("description");
+                entity.Property(e => e.Description).HasColumnName("description");
                 entity.Property(e => e.Price).HasColumnType("decimal(10,2)").IsRequired().HasColumnName("price");
                 entity.Property(e => e.FileURL).IsRequired().HasColumnName("fileurl");
                 entity.Property(e => e.UploadDate).HasColumnName("uploaddate");
@@ -63,14 +65,14 @@ namespace IndieArtMarketplace.DAL
                 entity.Property(e => e.License).HasColumnName("license");
                 entity.HasOne<User>()
                     .WithMany()
-                    .HasForeignKey(e => e.ArtistID)
-                    .HasConstraintName("fk_musictracks_users_artistid");
+                    .HasForeignKey(e => e.ArtistID);
             });
 
             // Configure Transaction
             modelBuilder.Entity<Transaction>(entity =>
             {
-                entity.HasKey(e => e.TransactionID).HasName("transactionid");
+                entity.HasKey(e => e.TransactionID);
+                entity.Property(e => e.TransactionID).HasColumnName("transactionid");
                 entity.Property(e => e.BuyerID).IsRequired().HasColumnName("buyerid");
                 entity.Property(e => e.ArtworkID).HasColumnName("artworkid");
                 entity.Property(e => e.TrackID).HasColumnName("trackid");
@@ -79,18 +81,17 @@ namespace IndieArtMarketplace.DAL
 
                 entity.HasOne<User>()
                     .WithMany()
-                    .HasForeignKey(e => e.BuyerID)
-                    .HasConstraintName("fk_transactions_users_buyerid");
+                    .HasForeignKey(e => e.BuyerID);
 
                 entity.HasOne<Artwork>()
                     .WithMany()
-                    .HasForeignKey(e => e.ArtworkID)
-                    .HasConstraintName("fk_transactions_artworks_artworkid");
+                    .HasForeignKey(e => e.ArtworkID);
 
                 entity.HasOne<MusicTrack>()
                     .WithMany()
-                    .HasForeignKey(e => e.TrackID)
-                    .HasConstraintName("fk_transactions_musictracks_trackid");
+                    .HasForeignKey(e => e.TrackID);
+
+                entity.HasIndex(e => new { e.ArtworkID, e.TrackID }).IsUnique();
             });
         }
     }
