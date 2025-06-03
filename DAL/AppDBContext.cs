@@ -17,10 +17,10 @@ namespace IndieArtMarketplace.DAL
             base.OnModelCreating(modelBuilder);
 
             // Tablo isimlerini PostgreSQL'deki mevcut tablo isimleriyle eşleştir
-            modelBuilder.Entity<User>().ToTable("Users");
-            modelBuilder.Entity<Artwork>().ToTable("Artworks");
-            modelBuilder.Entity<MusicTrack>().ToTable("MusicTracks");
-            modelBuilder.Entity<Transaction>().ToTable("Transactions");
+            modelBuilder.Entity<User>().ToTable("users", schema: "public");
+            modelBuilder.Entity<Artwork>().ToTable("artworks", schema: "public");
+            modelBuilder.Entity<MusicTrack>().ToTable("musictracks", schema: "public");
+            modelBuilder.Entity<Transaction>().ToTable("transactions", schema: "public");
 
             // Configure User
             modelBuilder.Entity<User>(entity =>
