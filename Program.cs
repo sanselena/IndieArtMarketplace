@@ -12,8 +12,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString, npgsqlOptions =>
     {
         npgsqlOptions.EnableRetryOnFailure(
-            maxRetryCount: 3,
-            maxRetryDelay: TimeSpan.FromSeconds(5)
+            maxRetryCount: 5,
+            maxRetryDelay: TimeSpan.FromSeconds(10),
+            errorCodesToAdd: null
         );
         npgsqlOptions.CommandTimeout(30);
     });
@@ -66,7 +67,7 @@ try
     var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     if (!context.Database.CanConnect())
     {
-        throw new Exception("Cannot connect to database. Please check your connection string and SQL Server status.");
+        throw new Exception("Cannot connect to database. Please check your connection string and PostgreSQL status.");
     }
     Console.WriteLine("Database connection successful!");
 }

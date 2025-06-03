@@ -5,12 +5,12 @@ namespace IndieArtMarketplace.Models
     public class Artwork
     {
         public int ArtworkID { get; set; }
-        public string Title { get; set; }
-        public string Description { get; set; }
+        public required string Title { get; set; }
+        public required string Description { get; set; }
         public decimal Price { get; set; }
-        public string FileURL { get; set; } // Path to image file
+        public required string FileURL { get; set; } // Path to image file
         public DateTime UploadDate { get; set; } = DateTime.Now;
         public int ArtistID { get; set; } // Foreign key to User
-        public string License { get; set; } // License type for the artwork
+        public required string License { get; set; } // License type for the artwork
     }
 }
