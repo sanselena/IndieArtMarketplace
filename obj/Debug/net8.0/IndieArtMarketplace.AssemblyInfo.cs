@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("IndieArtMarketplace")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6ee9ca28df138541bdf908e413c1d21e914c8107")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+83759e225e6a73849b4e2f669da86639efcd2f5f")]
 [assembly: System.Reflection.AssemblyProductAttribute("IndieArtMarketplace")]
 [assembly: System.Reflection.AssemblyTitleAttribute("IndieArtMarketplace")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\seren\\source\\repos\\IndieArtMarketplace\\IndieArtMarketplace.csproj": {}
+    "C:\\Users\\seren\\source\\repos\\sanselena\\IndieArtMarketplace\\IndieArtMarketplace.csproj": {}
   },
   "projects": {
-    "C:\\Users\\seren\\source\\repos\\IndieArtMarketplace\\IndieArtMarketplace.csproj": {
+    "C:\\Users\\seren\\source\\repos\\sanselena\\IndieArtMarketplace\\IndieArtMarketplace.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\seren\\source\\repos\\IndieArtMarketplace\\IndieArtMarketplace.csproj",
+        "projectUniqueName": "C:\\Users\\seren\\source\\repos\\sanselena\\IndieArtMarketplace\\IndieArtMarketplace.csproj",
         "projectName": "IndieArtMarketplace",
-        "projectPath": "C:\\Users\\seren\\source\\repos\\IndieArtMarketplace\\IndieArtMarketplace.csproj",
+        "projectPath": "C:\\Users\\seren\\source\\repos\\sanselena\\IndieArtMarketplace\\IndieArtMarketplace.csproj",
         "packagesPath": "C:\\Users\\seren\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\seren\\source\\repos\\IndieArtMarketplace\\obj\\",
+        "outputPath": "C:\\Users\\seren\\source\\repos\\sanselena\\IndieArtMarketplace\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -65,6 +65,10 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[9.0.5, )"
+            },
+            "Npgsql.EntityFrameworkCore.PostgreSQL": {
+              "target": "Package",
+              "version": "[9.0.4, )"
             }
           },
           "imports": [

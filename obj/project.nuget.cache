@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "V//tF3zf3xQ=",
+  "dgSpecHash": "lBq8oOknJOA=",
   "success": true,
-  "projectFilePath": "C:\\Users\\seren\\source\\repos\\IndieArtMarketplace\\IndieArtMarketplace.csproj",
+  "projectFilePath": "C:\\Users\\seren\\source\\repos\\sanselena\\IndieArtMarketplace\\IndieArtMarketplace.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\seren\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\seren\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",
@@ -49,6 +49,8 @@
     "C:\\Users\\seren\\.nuget\\packages\\microsoft.sqlserver.server\\1.0.0\\microsoft.sqlserver.server.1.0.0.nupkg.sha512",
     "C:\\Users\\seren\\.nuget\\packages\\microsoft.win32.systemevents\\6.0.0\\microsoft.win32.systemevents.6.0.0.nupkg.sha512",
     "C:\\Users\\seren\\.nuget\\packages\\mono.texttemplating\\3.0.0\\mono.texttemplating.3.0.0.nupkg.sha512",
+    "C:\\Users\\seren\\.nuget\\packages\\npgsql\\9.0.3\\npgsql.9.0.3.nupkg.sha512",
+    "C:\\Users\\seren\\.nuget\\packages\\npgsql.entityframeworkcore.postgresql\\9.0.4\\npgsql.entityframeworkcore.postgresql.9.0.4.nupkg.sha512",
     "C:\\Users\\seren\\.nuget\\packages\\system.clientmodel\\1.0.0\\system.clientmodel.1.0.0.nupkg.sha512",
     "C:\\Users\\seren\\.nuget\\packages\\system.codedom\\6.0.0\\system.codedom.6.0.0.nupkg.sha512",
     "C:\\Users\\seren\\.nuget\\packages\\system.collections.immutable\\7.0.0\\system.collections.immutable.7.0.0.nupkg.sha512",
