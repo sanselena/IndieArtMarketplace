@@ -33,7 +33,7 @@ namespace IndieArtMarketplace.Controllers
             if (userId == null)
                 return RedirectToAction("Login", "User");
 
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && viewModel.Title != null && viewModel.Description != null && viewModel.License != null)
             {
                 string fileUrl = "/uploads/default.jpg"; // Default value
                 if (viewModel.File != null && viewModel.File.Length > 0)
@@ -84,7 +84,7 @@ namespace IndieArtMarketplace.Controllers
             if (userId == null)
                 return RedirectToAction("Login", "User");
 
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && viewModel.Title != null && viewModel.Description != null && viewModel.License != null)
             {
                 string fileUrl = "/uploads/default.mp3"; // Default value
                 if (viewModel.File != null && viewModel.File.Length > 0)

@@ -5,11 +5,11 @@ namespace IndieArtMarketplace.Models
 {
     public class MusicTrackUploadViewModel
     {
-        public required string Title { get; set; }
-        public required string Description { get; set; }
+        public string? Title { get; set; }
+        public string? Description { get; set; }
         public decimal Price { get; set; }
-        public required IFormFile File { get; set; }
-        public required string License { get; set; }
+        public IFormFile? File { get; set; }
+        public string? License { get; set; }
 
         public List<string> AvailableLicenses { get; set; } = new List<string>
         {
