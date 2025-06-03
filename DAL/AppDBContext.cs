@@ -16,6 +16,12 @@ namespace IndieArtMarketplace.DAL
         {
             base.OnModelCreating(modelBuilder);
 
+            // Tablo isimlerini PostgreSQL'deki mevcut tablo isimleriyle eşleştir
+            modelBuilder.Entity<User>().ToTable("Users");
+            modelBuilder.Entity<Artwork>().ToTable("Artworks");
+            modelBuilder.Entity<MusicTrack>().ToTable("MusicTracks");
+            modelBuilder.Entity<Transaction>().ToTable("Transactions");
+
             // Configure User
             modelBuilder.Entity<User>(entity =>
             {
@@ -32,7 +38,7 @@ namespace IndieArtMarketplace.DAL
                 entity.HasKey(e => e.ArtworkID);
                 entity.Property(e => e.Title).IsRequired();
                 entity.Property(e => e.Description).IsRequired();
-                entity.Property(e => e.Price).HasColumnType("decimal(18,2)");
+                entity.Property(e => e.Price).HasColumnType("decimal(10,2)");
                 entity.HasOne<User>()
                     .WithMany()
                     .HasForeignKey(e => e.ArtistID);
@@ -44,7 +50,7 @@ namespace IndieArtMarketplace.DAL
                 entity.HasKey(e => e.TrackID);
                 entity.Property(e => e.Title).IsRequired();
                 entity.Property(e => e.Description).IsRequired();
-                entity.Property(e => e.Price).HasColumnType("decimal(18,2)");
+                entity.Property(e => e.Price).HasColumnType("decimal(10,2)");
                 entity.HasOne<User>()
                     .WithMany()
                     .HasForeignKey(e => e.ArtistID);
@@ -54,7 +60,7 @@ namespace IndieArtMarketplace.DAL
             modelBuilder.Entity<Transaction>(entity =>
             {
                 entity.HasKey(e => e.TransactionID);
-                entity.Property(e => e.Amount).HasColumnType("decimal(18,2)");
+                entity.Property(e => e.Amount).HasColumnType("decimal(10,2)");
                 entity.HasOne<User>()
                     .WithMany()
                     .HasForeignKey(e => e.BuyerID);
