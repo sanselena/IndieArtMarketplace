@@ -35,15 +35,7 @@ namespace IndieArtMarketplace.Controllers
 
             if (ModelState.IsValid)
             {
-                var artwork = new Artwork
-                {
-                    Title = viewModel.Title,
-                    Description = viewModel.Description,
-                    Price = viewModel.Price,
-                    License = viewModel.License,
-                    ArtistID = userId.Value
-                };
-
+                string fileUrl = "/uploads/default.jpg"; // Default value
                 if (viewModel.File != null && viewModel.File.Length > 0)
                 {
                     var uploads = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
@@ -56,8 +48,18 @@ namespace IndieArtMarketplace.Controllers
                     {
                         viewModel.File.CopyTo(stream);
                     }
-                    artwork.FileURL = "/uploads/" + fileName;
+                    fileUrl = "/uploads/" + fileName;
                 }
+
+                var artwork = new Artwork
+                {
+                    Title = viewModel.Title,
+                    Description = viewModel.Description,
+                    Price = viewModel.Price,
+                    License = viewModel.License,
+                    ArtistID = userId.Value,
+                    FileURL = fileUrl
+                };
 
                 _userService.CreateArtwork(artwork);
 
@@ -84,15 +86,7 @@ namespace IndieArtMarketplace.Controllers
 
             if (ModelState.IsValid)
             {
-                var musicTrack = new MusicTrack
-                {
-                    Title = viewModel.Title,
-                    Description = viewModel.Description,
-                    Price = viewModel.Price,
-                    License = viewModel.License,
-                    ArtistID = userId.Value
-                };
-
+                string fileUrl = "/uploads/default.mp3"; // Default value
                 if (viewModel.File != null && viewModel.File.Length > 0)
                 {
                     var uploads = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
@@ -105,8 +99,18 @@ namespace IndieArtMarketplace.Controllers
                     {
                         viewModel.File.CopyTo(stream);
                     }
-                    musicTrack.FileURL = "/uploads/" + fileName;
+                    fileUrl = "/uploads/" + fileName;
                 }
+
+                var musicTrack = new MusicTrack
+                {
+                    Title = viewModel.Title,
+                    Description = viewModel.Description,
+                    Price = viewModel.Price,
+                    License = viewModel.License,
+                    ArtistID = userId.Value,
+                    FileURL = fileUrl
+                };
 
                 _userService.CreateMusicTrack(musicTrack);
 
