@@ -35,6 +35,9 @@
                             <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "User" && ViewContext.RouteData.Values["action"]?.ToString() == "Profile" ? "active" : "")" asp-controller="User" asp-action="Profile">Profile</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link premium-button" asp-controller="Premium" asp-action="Index">Premium</a>
+                        </li>
+                        <li class="nav-item">
                             @{ var userId = Context.Session.GetInt32("UserID"); }
                             @if (userId == null)
                             {
@@ -62,6 +65,19 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @* Script to track Premium button clicks *@
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const premiumButton = document.querySelector('.premium-button');
+            if (premiumButton) {
+                premiumButton.addEventListener('click', function () {
+                    logButtonClick('Premium_Navbar');
+                });
+            }
+        });
+    </script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
