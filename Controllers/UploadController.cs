@@ -32,7 +32,7 @@ namespace IndieArtMarketplace.Controllers
         }
 
         [HttpPost]
-        public IActionResult UploadArtwork(ArtworkUploadViewModel viewModel)
+        public async Task<IActionResult> UploadArtwork(ArtworkUploadViewModel viewModel)
         {
             var userId = HttpContext.Session.GetInt32("UserID");
             if (userId == null)
@@ -95,7 +95,7 @@ namespace IndieArtMarketplace.Controllers
         }
 
         [HttpPost]
-        public IActionResult UploadMusic(MusicTrackUploadViewModel viewModel)
+        public async Task<IActionResult> UploadMusic(MusicTrackUploadViewModel viewModel)
         {
             var userId = HttpContext.Session.GetInt32("UserID");
             if (userId == null)
