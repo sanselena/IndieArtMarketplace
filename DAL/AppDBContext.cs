@@ -11,6 +11,8 @@ namespace IndieArtMarketplace.DAL
         public DbSet<Artwork> Artworks { get; set; }
         public DbSet<MusicTrack> MusicTracks { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
+        public DbSet<ClickLog> ClickLogs { get; set; }
+        public DbSet<UploadLog> UploadLogs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -21,6 +23,8 @@ namespace IndieArtMarketplace.DAL
             modelBuilder.Entity<Artwork>().ToTable("artworks", schema: "public");
             modelBuilder.Entity<MusicTrack>().ToTable("musictracks", schema: "public");
             modelBuilder.Entity<Transaction>().ToTable("transactions", schema: "public");
+            modelBuilder.Entity<ClickLog>().ToTable("click_logs", schema: "public");
+            modelBuilder.Entity<UploadLog>().ToTable("upload_logs", schema: "public");
 
             // Configure User
             modelBuilder.Entity<User>(entity =>
@@ -92,6 +96,29 @@ namespace IndieArtMarketplace.DAL
                     .HasForeignKey(e => e.TrackID);
 
                 entity.HasIndex(e => new { e.ArtworkID, e.TrackID }).IsUnique();
+            });
+
+            // Configure ClickLog
+            modelBuilder.Entity<ClickLog>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).HasColumnName("id");
+                entity.Property(e => e.ButtonType).HasColumnName("button_type");
+                entity.Property(e => e.ClickedAt).HasColumnName("clicked_at");
+                entity.Property(e => e.UserId).HasColumnName("user_id");
+                entity.Property(e => e.SessionId).HasColumnName("session_id");
+            });
+
+            // Configure UploadLog
+            modelBuilder.Entity<UploadLog>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).HasColumnName("id");
+                entity.Property(e => e.UserId).HasColumnName("user_id");
+                entity.Property(e => e.ContentType).HasColumnName("content_type");
+                entity.Property(e => e.UploadedAt).HasColumnName("uploaded_at");
+                entity.Property(e => e.Title).HasColumnName("title");
+                entity.Property(e => e.Price).HasColumnType("numeric(10,2)").HasColumnName("price");
             });
         }
     }
