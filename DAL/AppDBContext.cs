@@ -1,15 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using IndieArtMarketplace.Models;
-using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 
 namespace IndieArtMarketplace.DAL
 {
-    public class AppDbContext : DbContext, IDataProtectionKeyContext
+    public class AppDbContext : DbContext
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
         
-        public DbSet<DataProtectionKey> DataProtectionKeys { get; set; } = null!;
-
         public DbSet<User> Users { get; set; }
         public DbSet<Artwork> Artworks { get; set; }
         public DbSet<MusicTrack> MusicTracks { get; set; }
@@ -20,8 +17,6 @@ namespace IndieArtMarketplace.DAL
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
-            modelBuilder.Entity<DataProtectionKey>().ToTable("data_protection_keys", schema: "public");
 
             modelBuilder.Entity<User>().ToTable("users", schema: "public");
             modelBuilder.Entity<Artwork>().ToTable("artworks", schema: "public");
