@@ -1,12 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using IndieArtMarketplace.Models;
+using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 
 namespace IndieArtMarketplace.DAL
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : DbContext, IDataProtectionKeyContext
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
         
+        public DbSet<DataProtectionKey> DataProtectionKeys { get; set; } = null!;
+
         public DbSet<User> Users { get; set; }
         public DbSet<Artwork> Artworks { get; set; }
         public DbSet<MusicTrack> MusicTracks { get; set; }
@@ -18,7 +21,8 @@ namespace IndieArtMarketplace.DAL
         {
             base.OnModelCreating(modelBuilder);
 
-            // Tablo isimlerini PostgreSQL'deki mevcut tablo isimleriyle eşleştir
+            modelBuilder.Entity<DataProtectionKey>().ToTable("data_protection_keys", schema: "public");
+
             modelBuilder.Entity<User>().ToTable("users", schema: "public");
             modelBuilder.Entity<Artwork>().ToTable("artworks", schema: "public");
             modelBuilder.Entity<MusicTrack>().ToTable("musictracks", schema: "public");
@@ -26,7 +30,6 @@ namespace IndieArtMarketplace.DAL
             modelBuilder.Entity<ClickLog>().ToTable("click_logs", schema: "public");
             modelBuilder.Entity<UploadLog>().ToTable("upload_logs", schema: "public");
 
-            // Configure User
             modelBuilder.Entity<User>(entity =>
             {
                 entity.HasKey(e => e.UserID);
@@ -38,7 +41,6 @@ namespace IndieArtMarketplace.DAL
                 entity.Property(e => e.RegistrationDate).HasColumnName("registrationdate");
             });
 
-            // Configure Artwork
             modelBuilder.Entity<Artwork>(entity =>
             {
                 entity.HasKey(e => e.ArtworkID);
@@ -55,7 +57,6 @@ namespace IndieArtMarketplace.DAL
                     .HasForeignKey(e => e.ArtistID);
             });
 
-            // Configure MusicTrack
             modelBuilder.Entity<MusicTrack>(entity =>
             {
                 entity.HasKey(e => e.TrackID);
@@ -72,7 +73,6 @@ namespace IndieArtMarketplace.DAL
                     .HasForeignKey(e => e.ArtistID);
             });
 
-            // Configure Transaction
             modelBuilder.Entity<Transaction>(entity =>
             {
                 entity.HasKey(e => e.TransactionID);
@@ -98,7 +98,6 @@ namespace IndieArtMarketplace.DAL
                 entity.HasIndex(e => new { e.ArtworkID, e.TrackID }).IsUnique();
             });
 
-            // Configure ClickLog
             modelBuilder.Entity<ClickLog>(entity =>
             {
                 entity.HasKey(e => e.Id);
@@ -109,7 +108,6 @@ namespace IndieArtMarketplace.DAL
                 entity.Property(e => e.SessionId).HasColumnName("session_id");
             });
 
-            // Configure UploadLog
             modelBuilder.Entity<UploadLog>(entity =>
             {
                 entity.HasKey(e => e.Id);

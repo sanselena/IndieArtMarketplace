@@ -2,6 +2,7 @@ using IndieArtMarketplace.Business.Services;
 using IndieArtMarketplace.DAL;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
+using Microsoft.AspNetCore.DataProtection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +23,10 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.EnableSensitiveDataLogging(false);
     options.EnableDetailedErrors(false);
 });
+
+// Configure Data Protection to use the database
+builder.Services.AddDataProtection()
+    .PersistKeysToEntityFramework<AppDbContext>();
 
 // Register Services
 builder.Services.AddScoped<UserService>();
