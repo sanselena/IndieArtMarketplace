@@ -351,24 +351,30 @@ body {
 .premium-button {
     font-weight: bold;
     position: relative;
-    /* Updated background gradient for constant white glow with a moving shine */
+    /* Background gradient for the white gloss effect */
     background: linear-gradient(
         90deg,
-        rgba(255, 255, 255, 0.8) 0%,    /* Base white opacity, slightly higher */
-        rgba(255, 255, 255, 1) 50%,     /* Full white opacity for shine */
-        rgba(255, 255, 255, 0.8) 100%  /* Base white opacity, slightly higher */
+        transparent 0%,
+        rgba(255, 255, 255, 1) 50%,
+        transparent 100%
     );
-    background-size: 300% 100%; /* Make gradient wider */
+    background-size: 300% 100%; /* Gradient is wider than the element */
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent; /* Make text color transparent to show background gradient */
-    animation: textshine 3s infinite linear; /* Keep constant animation */
+    animation: textshine 3s infinite linear; /* Constant animation */
 }
 
-/* New keyframes for text shine animation */
+/* Keyframes for text shine animation */
 @keyframes textshine {
-    0% { background-position: 0% 0; }
-    100% { background-position: 100% 0; }
+    0% { background-position: 0% 0; } /* Start with the gradient at the left */
+    100% { background-position: 100% 0; } /* Move the gradient to the right */
+}
+
+/* Remove hover effect if any */
+.premium-button:hover {
+    /* Ensure no specific hover effect interferes */
+    /* You might need to adjust this based on existing hover styles */
 }
 
 /* Style for Premium page content */
