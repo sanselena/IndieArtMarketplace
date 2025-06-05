@@ -4,16 +4,21 @@ using IndieArtMarketplace.Models;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using System.Linq;
+using IndieArtMarketplace.DAL;
+using System;
+using System.Threading.Tasks;
 
 namespace IndieArtMarketplace.Controllers
 {
     public class UploadController : Controller
     {
         private readonly UserService _userService;
+        private readonly AppDbContext _context;
 
-        public UploadController(UserService userService)
+        public UploadController(UserService userService, AppDbContext context)
         {
             _userService = userService;
+            _context = context;
         }
 
         public IActionResult Index()
@@ -62,6 +67,18 @@ namespace IndieArtMarketplace.Controllers
                 };
 
                 _userService.CreateArtwork(artwork);
+
+                // Log the artwork upload
+                var uploadLog = new UploadLog
+                {
+                    UserId = userId.Value,
+                    ContentType = "art",
+                    UploadedAt = DateTime.UtcNow, // Use UTC time
+                    Title = artwork.Title,
+                    Price = artwork.Price
+                };
+                _context.UploadLogs.Add(uploadLog);
+                await _context.SaveChangesAsync();
 
                 // Update user role to Artist if they were a Buyer
                 var user = _userService.GetAllUsers().FirstOrDefault(u => u.UserID == userId);
@@ -113,6 +130,18 @@ namespace IndieArtMarketplace.Controllers
                 };
 
                 _userService.CreateMusicTrack(musicTrack);
+
+                // Log the music track upload
+                var uploadLog = new UploadLog
+                {
+                    UserId = userId.Value,
+                    ContentType = "music",
+                    UploadedAt = DateTime.UtcNow, // Use UTC time
+                    Title = musicTrack.Title,
+                    Price = musicTrack.Price
+                };
+                _context.UploadLogs.Add(uploadLog);
+                await _context.SaveChangesAsync();
 
                 // Update user role to Artist if they were a Buyer
                 var user = _userService.GetAllUsers().FirstOrDefault(u => u.UserID == userId);

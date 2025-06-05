@@ -45,11 +45,33 @@
 
 @section Scripts {
     <script>
+        function logButtonClick(buttonType) {
+            const data = {
+                buttonType: buttonType
+                // UserId and SessionId will be added on the backend if available
+            };
+
+            fetch('/api/Log/click', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            }).then(response => {
+                if (!response.ok) {
+                    console.error('Failed to log button click:', response.statusText);
+                }
+            }).catch(error => {
+                console.error('Error logging button click:', error);
+            });
+        }
+
         function toggleCommissionText() {
             var commissionDiv = document.getElementById('commissionText');
             if (commissionDiv.style.display === 'none') {
                 commissionDiv.style.display = 'block';
                 document.getElementById('helpText').style.display = 'none'; // Hide other text
+                logButtonClick('Commission'); // Log the click
             } else {
                 commissionDiv.style.display = 'none';
             }
@@ -60,6 +82,7 @@
             if (helpDiv.style.display === 'none') {
                 helpDiv.style.display = 'block';
                 document.getElementById('commissionText').style.display = 'none'; // Hide other text
+                logButtonClick('Help your fellow artist'); // Log the click
             } else {
                 helpDiv.style.display = 'none';
             }
