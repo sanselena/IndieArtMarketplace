@@ -370,7 +370,7 @@ body {
     100% { background-position: 100% 0; }
 }
 
-/* Adjustments for hover/active states if needed */
-.premium-button:hover {
-    color: transparent !important;
+/* Style for Premium page content */
+.premium-content {
+    color: white !important;
 }
