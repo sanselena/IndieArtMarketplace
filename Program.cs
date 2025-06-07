@@ -2,8 +2,15 @@ using IndieArtMarketplace.Business.Services;
 using IndieArtMarketplace.DAL;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
+using Microsoft.AspNetCore.DataProtection;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Configure Data Protection
+var dataProtectionPath = Path.Combine(builder.Environment.ContentRootPath, "DataProtection-Keys");
+builder.Services.AddDataProtection()
+    .PersistKeysToFileSystem(new DirectoryInfo(dataProtectionPath))
+    .SetApplicationName("IndieArtMarketplace");
 
 // Add DbContext with connection validation
 builder.Services.AddDbContext<AppDbContext>(options =>
