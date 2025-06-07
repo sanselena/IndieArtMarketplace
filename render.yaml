@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: indie-art-marketplace
+    env: dotnet
+    buildCommand: dotnet publish -c Release -o out
+    startCommand: dotnet out/IndieArtMarketplace.dll
+    disk:
+      name: uploads
+      mountPath: /opt/render/project/src/uploads
+      sizeGB: 1 

@@ -1,16 +1,19 @@
 ﻿using IndieArtMarketplace.DAL;
 using IndieArtMarketplace.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace IndieArtMarketplace.Business.Services
 {
     public class UserService
     {
         private readonly AppDbContext _context;
+        private readonly ILogger<UserService> _logger;
 
-        public UserService(AppDbContext context)
+        public UserService(AppDbContext context, ILogger<UserService> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         // User methods
@@ -28,10 +31,20 @@ namespace IndieArtMarketplace.Business.Services
                 .FirstOrDefault(u => u.Email == input || u.Username == input);
         }
 
-        public void CreateUser(User user)
+        public async Task<User> CreateUser(User user)
         {
-            _context.Users.Add(user);
-            _context.SaveChanges();
+            try
+            {
+                user.RegistrationDate = DateTime.UtcNow; // Ensure UTC time
+                _context.Users.Add(user);
+                await _context.SaveChangesAsync();
+                return user;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error creating user");
+                throw;
+            }
         }
 
         public void UpdateUser(User user)
@@ -62,10 +75,22 @@ namespace IndieArtMarketplace.Business.Services
                 .FirstOrDefault(a => a.ArtworkID == id);
         }
 
-        public void CreateArtwork(Artwork artwork)
+        public async Task<Artwork> CreateArtwork(Artwork artwork)
         {
-            _context.Artworks.Add(artwork);
-            _context.SaveChanges();
+            try
+            {
+                // Ensure UTC time
+                artwork.UploadDate = DateTime.UtcNow;
+                
+                _context.Artworks.Add(artwork);
+                await _context.SaveChangesAsync();
+                return artwork;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error creating artwork");
+                throw;
+            }
         }
 
         // Music Track methods
@@ -83,10 +108,22 @@ namespace IndieArtMarketplace.Business.Services
                 .FirstOrDefault(m => m.TrackID == id);
         }
 
-        public void CreateMusicTrack(MusicTrack musicTrack)
+        public async Task<MusicTrack> CreateMusicTrack(MusicTrack musicTrack)
         {
-            _context.MusicTracks.Add(musicTrack);
-            _context.SaveChanges();
+            try
+            {
+                // Ensure UTC time
+                musicTrack.UploadDate = DateTime.UtcNow;
+                
+                _context.MusicTracks.Add(musicTrack);
+                await _context.SaveChangesAsync();
+                return musicTrack;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error creating music track");
+                throw;
+            }
         }
 
         // Transaction methods
@@ -104,10 +141,20 @@ namespace IndieArtMarketplace.Business.Services
                 .FirstOrDefault(t => t.TransactionID == id);
         }
 
-        public void CreateTransaction(Transaction transaction)
+        public async Task<Transaction> CreateTransaction(Transaction transaction)
         {
-            _context.Transactions.Add(transaction);
-            _context.SaveChanges();
+            try
+            {
+                transaction.PurchaseDate = DateTime.UtcNow; // Ensure UTC time
+                _context.Transactions.Add(transaction);
+                await _context.SaveChangesAsync();
+                return transaction;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error creating transaction");
+                throw;
+            }
         }
     }
 }

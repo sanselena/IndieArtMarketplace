@@ -113,7 +113,8 @@ namespace IndieArtMarketplace.Controllers
                 ArtworkID = artworkId,
                 TrackID = trackId,
                 Amount = itemPrice,
-                PurchaseDate = DateTime.Now // Set purchase date
+                PurchaseDate = DateTime.UtcNow, // Changed to UTC
+                Status = "Completed"
             };
 
             _userService.CreateTransaction(transaction);
