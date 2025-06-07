@@ -31,10 +31,9 @@ namespace IndieArtMarketplace.Controllers
 
         public IActionResult Index()
         {
-            var userId = HttpContext.Session.GetInt32("UserID");
-            if (userId == null)
-                return RedirectToAction("Login", "User");
-
+            // No need to check HttpContext.Session.GetInt32("UserID") here,
+            // as the [Authorize] attribute ensures the user is authenticated.
+            // If not authenticated, they would be redirected by the middleware.
             var viewModel = new ArtworkUploadViewModel();
             return View(viewModel);
         }
@@ -44,9 +43,12 @@ namespace IndieArtMarketplace.Controllers
         {
             try
             {
-                var userId = HttpContext.Session.GetInt32("UserID");
-                if (userId == null)
-                    return RedirectToAction("Login", "User");
+                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+                if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out var userId))
+                {
+                    _logger.LogWarning("User ID not found in claims or invalid format for UploadArtwork.");
+                    return Unauthorized(); // Or RedirectToAction("Login", "User");
+                }
 
                 if (!ModelState.IsValid)
                 {
@@ -103,19 +105,19 @@ namespace IndieArtMarketplace.Controllers
                     Description = viewModel.Description,
                     Price = viewModel.Price,
                     License = viewModel.License,
-                    ArtistID = userId.Value,
+                    ArtistID = userId,
                     FileURL = fileUrl,
                     UploadDate = DateTime.UtcNow // Ensure UTC time
                 };
 
                 try
                 {
-                    _userService.CreateArtwork(artwork);
+                    await _userService.CreateArtwork(artwork); // Make sure this is awaited if it's async
 
                     // Log the artwork upload
                     var uploadLog = new UploadLog
                     {
-                        UserId = userId.Value,
+                        UserId = userId,
                         ContentType = "art",
                         UploadedAt = DateTime.UtcNow,
                         Title = artwork.Title,
@@ -173,7 +175,13 @@ namespace IndieArtMarketplace.Controllers
                     return View("Index", viewModel);
                 }
 
-                var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier); // Retrieve from claims
+                if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out var userId))
+                {
+                    _logger.LogWarning("User ID not found in claims or invalid format for UploadMusic.");
+                    return Unauthorized();
+                }
+
                 var uploadsDir = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
                 
                 if (!Directory.Exists(uploadsDir))

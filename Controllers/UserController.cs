@@ -2,6 +2,9 @@ using Microsoft.AspNetCore.Mvc;
 using IndieArtMarketplace.Business.Services;
 using IndieArtMarketplace.Models;
 using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace IndieArtMarketplace.Controllers
 {
@@ -20,12 +23,34 @@ namespace IndieArtMarketplace.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(string loginInput, string password)
+        public async Task<IActionResult> Login(string loginInput, string password)
         {
             var user = _userService.GetUserByEmailOrUsername(loginInput);
             if (user != null && user.Password == password)
             {
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.NameIdentifier, user.UserID.ToString()),
+                    new Claim(ClaimTypes.Name, user.Username),
+                    new Claim(ClaimTypes.Role, user.Role)
+                };
+
+                var claimsIdentity = new ClaimsIdentity(
+                    claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                var authProperties = new AuthenticationProperties
+                {
+                    IsPersistent = true,
+                    ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(30)
+                };
+
+                await HttpContext.SignInAsync(
+                    CookieAuthenticationDefaults.AuthenticationScheme,
+                    new ClaimsPrincipal(claimsIdentity),
+                    authProperties);
+
                 HttpContext.Session.SetInt32("UserID", user.UserID);
+
                 return RedirectToAction("Profile");
             }
             ViewBag.Error = "Invalid credentials.";
