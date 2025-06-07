@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.AspNetCore.Http.Features;
 using System.IO;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Logging;
 
 // Adding a dummy comment to force a new deploy on Render.com
 
@@ -95,6 +96,14 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+
+// Add logging for WebRootPath and uploads directory
+var logger = app.Services.GetRequiredService<ILogger<Program>>();
+logger.LogInformation("WebRootPath: {WebRootPath}", builder.Environment.WebRootPath);
+
+var uploadsPath = Path.Combine(builder.Environment.WebRootPath, "uploads");
+logger.LogInformation("Expected uploads directory path: {UploadsPath}", uploadsPath);
+logger.LogInformation("Does uploads directory exist? {Exists}", Directory.Exists(uploadsPath));
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
