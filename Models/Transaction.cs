@@ -10,5 +10,6 @@ namespace IndieArtMarketplace.Models
         public int? TrackID { get; set; } // Nullable (if buying artwork)
         public decimal Amount { get; set; }
         public DateTime PurchaseDate { get; set; } = DateTime.UtcNow;
+        public string Status { get; set; } = "Pending"; // Added Status property with default value
     }
 }
