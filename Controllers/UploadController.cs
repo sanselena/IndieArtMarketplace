@@ -112,7 +112,7 @@ namespace IndieArtMarketplace.Controllers
 
                 try
                 {
-                    await _userService.CreateArtwork(artwork); // Make sure this is awaited if it's async
+                    await _userService.CreateArtwork(artwork); // Ensure this is awaited
 
                     // Log the artwork upload
                     var uploadLog = new UploadLog
@@ -160,7 +160,20 @@ namespace IndieArtMarketplace.Controllers
                 if (!ModelState.IsValid)
                 {
                     _logger.LogWarning("Invalid model state during music track upload");
-                    return View("Index", viewModel);
+                    // Create a new ArtworkUploadViewModel to correctly display the view
+                    var artworkViewModel = new ArtworkUploadViewModel();
+                    // Transfer model state errors to the new view model
+                    foreach (var modelStateEntry in ModelState)
+                    {
+                        if (modelStateEntry.Value.Errors.Any())
+                        {
+                            foreach (var error in modelStateEntry.Value.Errors)
+                            {
+                                ModelState.AddModelError(modelStateEntry.Key, error.ErrorMessage);
+                            }
+                        }
+                    }
+                    return View("Index", artworkViewModel);
                 }
 
                 if (viewModel.File == null || viewModel.File.Length == 0)
@@ -214,7 +227,7 @@ namespace IndieArtMarketplace.Controllers
 
                 try
                 {
-                    await _userService.CreateMusicTrack(musicTrack);
+                    await _userService.CreateMusicTrack(musicTrack); // Ensure this is awaited
 
                     // Log the music track upload
                     var uploadLog = new UploadLog
