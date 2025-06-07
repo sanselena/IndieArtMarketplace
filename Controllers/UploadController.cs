@@ -279,16 +279,6 @@ namespace IndieArtMarketplace.Controllers
                         "Creative Commons Zero (Public Domain)"
                     };
                     // Transfer model state errors to the new view model
-                    foreach (var modelStateEntry in ModelState)
-                    {
-                        if (modelStateEntry.Value.Errors.Any())
-                        {
-                            foreach (var error in modelStateEntry.Value.Errors)
-                            {
-                                ModelState.AddModelError(modelStateEntry.Key, error.ErrorMessage);
-                            }
-                        }
-                    }
                     return View("Index", artworkViewModel);
                 }
 
@@ -307,16 +297,6 @@ namespace IndieArtMarketplace.Controllers
                         "Creative Commons Zero (Public Domain)"
                     };
                     // Transfer model state errors to the new view model
-                    foreach (var modelStateEntry in ModelState)
-                    {
-                        if (modelStateEntry.Value.Errors.Any())
-                        {
-                            foreach (var error in modelStateEntry.Value.Errors)
-                            {
-                                ModelState.AddModelError(modelStateEntry.Key, error.ErrorMessage);
-                            }
-                        }
-                    }
                     return View("Index", artworkViewModel);
                 }
 
@@ -335,16 +315,6 @@ namespace IndieArtMarketplace.Controllers
                         "Creative Commons Zero (Public Domain)"
                     };
                     // Transfer model state errors to the new view model
-                    foreach (var modelStateEntry in ModelState)
-                    {
-                        if (modelStateEntry.Value.Errors.Any())
-                        {
-                            foreach (var error in modelStateEntry.Value.Errors)
-                            {
-                                ModelState.AddModelError(modelStateEntry.Key, error.ErrorMessage);
-                            }
-                        }
-                    }
                     return View("Index", artworkViewModel);
                 }
 
@@ -428,16 +398,6 @@ namespace IndieArtMarketplace.Controllers
                         "Creative Commons Zero (Public Domain)"
                     };
                     // Transfer model state errors to the new view model
-                    foreach (var modelStateEntry in ModelState)
-                    {
-                        if (modelStateEntry.Value.Errors.Any())
-                        {
-                            foreach (var error in modelStateEntry.Value.Errors)
-                            {
-                                ModelState.AddModelError(modelStateEntry.Key, error.ErrorMessage);
-                            }
-                        }
-                    }
                     return View("Index", artworkViewModel);
                 }
             }
@@ -457,16 +417,6 @@ namespace IndieArtMarketplace.Controllers
                     "Creative Commons Zero (Public Domain)"
                 };
                 // Transfer model state errors to the new view model
-                foreach (var modelStateEntry in ModelState)
-                {
-                    if (modelStateEntry.Value.Errors.Any())
-                    {
-                        foreach (var error in modelStateEntry.Value.Errors)
-                        {
-                            ModelState.AddModelError(modelStateEntry.Key, error.ErrorMessage);
-                        }
-                    }
-                }
                 return View("Index", artworkViewModel);
             }
         }
