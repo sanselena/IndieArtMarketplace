@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using System.Collections.Generic;
 
 namespace IndieArtMarketplace.Controllers
 {
@@ -31,10 +32,17 @@ namespace IndieArtMarketplace.Controllers
 
         public IActionResult Index()
         {
-            // No need to check HttpContext.Session.GetInt32("UserID") here,
-            // as the [Authorize] attribute ensures the user is authenticated.
-            // If not authenticated, they would be redirected by the middleware.
             var viewModel = new ArtworkUploadViewModel();
+            // Ensure AvailableLicenses is populated when displaying the initial view
+            viewModel.AvailableLicenses = new List<string>
+            {
+                "All Rights Reserved",
+                "Creative Commons Attribution",
+                "Creative Commons Attribution-ShareAlike",
+                "Creative Commons Attribution-NoDerivatives",
+                "Creative Commons Attribution-NonCommercial",
+                "Creative Commons Zero (Public Domain)"
+            };
             return View(viewModel);
         }
 
@@ -47,24 +55,54 @@ namespace IndieArtMarketplace.Controllers
                 if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out var userId))
                 {
                     _logger.LogWarning("User ID not found in claims or invalid format for UploadArtwork.");
-                    return Unauthorized(); // Or RedirectToAction("Login", "User");
+                    return Unauthorized();
                 }
 
                 if (!ModelState.IsValid)
                 {
                     _logger.LogWarning("Invalid model state for artwork upload");
+                    // Repopulate AvailableLicenses on validation failure
+                    viewModel.AvailableLicenses = new List<string>
+                    {
+                        "All Rights Reserved",
+                        "Creative Commons Attribution",
+                        "Creative Commons Attribution-ShareAlike",
+                        "Creative Commons Attribution-NoDerivatives",
+                        "Creative Commons Attribution-NonCommercial",
+                        "Creative Commons Zero (Public Domain)"
+                    };
                     return View("Index", viewModel);
                 }
 
                 if (viewModel.File == null || viewModel.File.Length == 0)
                 {
                     ModelState.AddModelError("File", "Please select a file to upload");
+                    // Repopulate AvailableLicenses on validation failure
+                    viewModel.AvailableLicenses = new List<string>
+                    {
+                        "All Rights Reserved",
+                        "Creative Commons Attribution",
+                        "Creative Commons Attribution-ShareAlike",
+                        "Creative Commons Attribution-NoDerivatives",
+                        "Creative Commons Attribution-NonCommercial",
+                        "Creative Commons Zero (Public Domain)"
+                    };
                     return View("Index", viewModel);
                 }
 
                 if (viewModel.File.Length > MaxFileSize)
                 {
                     ModelState.AddModelError("File", $"File size exceeds the maximum limit of {MaxFileSize / (1024 * 1024)}MB");
+                    // Repopulate AvailableLicenses on validation failure
+                    viewModel.AvailableLicenses = new List<string>
+                    {
+                        "All Rights Reserved",
+                        "Creative Commons Attribution",
+                        "Creative Commons Attribution-ShareAlike",
+                        "Creative Commons Attribution-NoDerivatives",
+                        "Creative Commons Attribution-NonCommercial",
+                        "Creative Commons Zero (Public Domain)"
+                    };
                     return View("Index", viewModel);
                 }
 
@@ -95,6 +133,16 @@ namespace IndieArtMarketplace.Controllers
                     {
                         _logger.LogError(ex, "Error saving file");
                         ModelState.AddModelError("File", "Error saving file. Please try again.");
+                        // Repopulate AvailableLicenses on validation failure
+                        viewModel.AvailableLicenses = new List<string>
+                        {
+                            "All Rights Reserved",
+                            "Creative Commons Attribution",
+                            "Creative Commons Attribution-ShareAlike",
+                            "Creative Commons Attribution-NoDerivatives",
+                            "Creative Commons Attribution-NonCommercial",
+                            "Creative Commons Zero (Public Domain)"
+                        };
                         return View("Index", viewModel);
                     }
                 }
@@ -141,6 +189,16 @@ namespace IndieArtMarketplace.Controllers
                 {
                     _logger.LogError(ex, "Error saving artwork to database");
                     ModelState.AddModelError("", "Error saving artwork. Please try again.");
+                    // Repopulate AvailableLicenses on validation failure
+                    viewModel.AvailableLicenses = new List<string>
+                    {
+                        "All Rights Reserved",
+                        "Creative Commons Attribution",
+                        "Creative Commons Attribution-ShareAlike",
+                        "Creative Commons Attribution-NoDerivatives",
+                        "Creative Commons Attribution-NonCommercial",
+                        "Creative Commons Zero (Public Domain)"
+                    };
                     return View("Index", viewModel);
                 }
             }
@@ -148,6 +206,16 @@ namespace IndieArtMarketplace.Controllers
             {
                 _logger.LogError(ex, "Unexpected error during artwork upload");
                 ModelState.AddModelError("", "An unexpected error occurred. Please try again.");
+                // Repopulate AvailableLicenses on validation failure
+                viewModel.AvailableLicenses = new List<string>
+                {
+                    "All Rights Reserved",
+                    "Creative Commons Attribution",
+                    "Creative Commons Attribution-ShareAlike",
+                    "Creative Commons Attribution-NoDerivatives",
+                    "Creative Commons Attribution-NonCommercial",
+                    "Creative Commons Zero (Public Domain)"
+                };
                 return View("Index", viewModel);
             }
         }
@@ -162,6 +230,16 @@ namespace IndieArtMarketplace.Controllers
                     _logger.LogWarning("Invalid model state during music track upload");
                     // Create a new ArtworkUploadViewModel to correctly display the view
                     var artworkViewModel = new ArtworkUploadViewModel();
+                    // Repopulate AvailableLicenses for the new view model
+                    artworkViewModel.AvailableLicenses = new List<string>
+                    {
+                        "All Rights Reserved",
+                        "Creative Commons Attribution",
+                        "Creative Commons Attribution-ShareAlike",
+                        "Creative Commons Attribution-NoDerivatives",
+                        "Creative Commons Attribution-NonCommercial",
+                        "Creative Commons Zero (Public Domain)"
+                    };
                     // Transfer model state errors to the new view model
                     foreach (var modelStateEntry in ModelState)
                     {
@@ -179,13 +257,57 @@ namespace IndieArtMarketplace.Controllers
                 if (viewModel.File == null || viewModel.File.Length == 0)
                 {
                     ModelState.AddModelError("File", "Please select a file to upload");
-                    return View("Index", viewModel);
+                    // Repopulate AvailableLicenses on validation failure
+                    var artworkViewModel = new ArtworkUploadViewModel();
+                    artworkViewModel.AvailableLicenses = new List<string>
+                    {
+                        "All Rights Reserved",
+                        "Creative Commons Attribution",
+                        "Creative Commons Attribution-ShareAlike",
+                        "Creative Commons Attribution-NoDerivatives",
+                        "Creative Commons Attribution-NonCommercial",
+                        "Creative Commons Zero (Public Domain)"
+                    };
+                    // Transfer model state errors to the new view model
+                    foreach (var modelStateEntry in ModelState)
+                    {
+                        if (modelStateEntry.Value.Errors.Any())
+                        {
+                            foreach (var error in modelStateEntry.Value.Errors)
+                            {
+                                ModelState.AddModelError(modelStateEntry.Key, error.ErrorMessage);
+                            }
+                        }
+                    }
+                    return View("Index", artworkViewModel);
                 }
 
                 if (viewModel.File.Length > MaxFileSize)
                 {
                     ModelState.AddModelError("File", $"File size exceeds the maximum limit of {MaxFileSize / (1024 * 1024)}MB");
-                    return View("Index", viewModel);
+                    // Repopulate AvailableLicenses on validation failure
+                    var artworkViewModel = new ArtworkUploadViewModel();
+                    artworkViewModel.AvailableLicenses = new List<string>
+                    {
+                        "All Rights Reserved",
+                        "Creative Commons Attribution",
+                        "Creative Commons Attribution-ShareAlike",
+                        "Creative Commons Attribution-NoDerivatives",
+                        "Creative Commons Attribution-NonCommercial",
+                        "Creative Commons Zero (Public Domain)"
+                    };
+                    // Transfer model state errors to the new view model
+                    foreach (var modelStateEntry in ModelState)
+                    {
+                        if (modelStateEntry.Value.Errors.Any())
+                        {
+                            foreach (var error in modelStateEntry.Value.Errors)
+                            {
+                                ModelState.AddModelError(modelStateEntry.Key, error.ErrorMessage);
+                            }
+                        }
+                    }
+                    return View("Index", artworkViewModel);
                 }
 
                 var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier); // Retrieve from claims
@@ -227,7 +349,7 @@ namespace IndieArtMarketplace.Controllers
 
                 try
                 {
-                    await _userService.CreateMusicTrack(musicTrack); // Ensure this is awaited
+                    await _userService.CreateMusicTrack(musicTrack);
 
                     // Log the music track upload
                     var uploadLog = new UploadLog
@@ -256,14 +378,58 @@ namespace IndieArtMarketplace.Controllers
                 {
                     _logger.LogError(ex, "Error saving music track to database");
                     ModelState.AddModelError("", "Error saving music track. Please try again.");
-                    return View("Index", viewModel);
+                    // Repopulate AvailableLicenses on validation failure
+                    var artworkViewModel = new ArtworkUploadViewModel();
+                    artworkViewModel.AvailableLicenses = new List<string>
+                    {
+                        "All Rights Reserved",
+                        "Creative Commons Attribution",
+                        "Creative Commons Attribution-ShareAlike",
+                        "Creative Commons Attribution-NoDerivatives",
+                        "Creative Commons Attribution-NonCommercial",
+                        "Creative Commons Zero (Public Domain)"
+                    };
+                    // Transfer model state errors to the new view model
+                    foreach (var modelStateEntry in ModelState)
+                    {
+                        if (modelStateEntry.Value.Errors.Any())
+                        {
+                            foreach (var error in modelStateEntry.Value.Errors)
+                            {
+                                ModelState.AddModelError(modelStateEntry.Key, error.ErrorMessage);
+                            }
+                        }
+                    }
+                    return View("Index", artworkViewModel);
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Unexpected error during music track upload");
                 ModelState.AddModelError("", "An unexpected error occurred. Please try again.");
-                return View("Index", viewModel);
+                // Repopulate AvailableLicenses on validation failure
+                var artworkViewModel = new ArtworkUploadViewModel();
+                artworkViewModel.AvailableLicenses = new List<string>
+                {
+                    "All Rights Reserved",
+                    "Creative Commons Attribution",
+                    "Creative Commons Attribution-ShareAlike",
+                    "Creative Commons Attribution-NoDerivatives",
+                    "Creative Commons Attribution-NonCommercial",
+                    "Creative Commons Zero (Public Domain)"
+                };
+                // Transfer model state errors to the new view model
+                foreach (var modelStateEntry in ModelState)
+                {
+                    if (modelStateEntry.Value.Errors.Any())
+                    {
+                        foreach (var error in modelStateEntry.Value.Errors)
+                        {
+                            ModelState.AddModelError(modelStateEntry.Key, error.ErrorMessage);
+                        }
+                    }
+                }
+                return View("Index", artworkViewModel);
             }
         }
 
