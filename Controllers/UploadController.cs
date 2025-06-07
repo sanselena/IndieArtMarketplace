@@ -47,13 +47,13 @@ namespace IndieArtMarketplace.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UploadArtwork(ArtworkUploadViewModel viewModel)
+        public async Task<IActionResult> UploadArtwork([FromForm] ArtworkUploadViewModel viewModel)
         {
             // Always ensure viewModel is not null before proceeding
             if (viewModel == null)
             {
-                _logger.LogWarning("UploadArtwork: ViewModel is null upon submission.");
-                ModelState.AddModelError("", "Invalid upload data. Please try again.");
+                _logger.LogWarning("UploadArtwork: ViewModel is null upon submission - Model Binding Failed.");
+                ModelState.AddModelError("", "Invalid upload data received. Please ensure all fields are correctly filled and try again.");
                 return View("Index", new ArtworkUploadViewModel()); // Return new, populated ViewModel
             }
 
@@ -237,13 +237,13 @@ namespace IndieArtMarketplace.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UploadMusic(MusicTrackUploadViewModel viewModel)
+        public async Task<IActionResult> UploadMusic([FromForm] MusicTrackUploadViewModel viewModel)
         {
             // Always ensure viewModel is not null before proceeding
             if (viewModel == null)
             {
-                _logger.LogWarning("UploadMusic: ViewModel is null upon submission.");
-                ModelState.AddModelError("", "Invalid upload data. Please try again.");
+                _logger.LogWarning("UploadMusic: ViewModel is null upon submission - Model Binding Failed.");
+                ModelState.AddModelError("", "Invalid upload data received. Please ensure all fields are correctly filled and try again.");
                 return View("Index", new ArtworkUploadViewModel()); // Return new, populated ViewModel
             }
 
