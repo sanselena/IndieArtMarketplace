@@ -94,6 +94,11 @@ namespace IndieArtMarketplace.Controllers
                 .Where(a => a.ArtistID == userId)
                 .ToList();
 
+            // Get user's uploaded music tracks
+            ViewBag.MusicTracks = _userService.GetAllMusicTracks()
+                .Where(m => m.ArtistID == userId)
+                .ToList();
+
             // Get user's purchase history
             ViewBag.Transactions = _userService.GetAllTransactions()
                 .Where(t => t.BuyerID == userId)
