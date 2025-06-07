@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using IndieArtMarketplace.Models;
+using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 
 namespace IndieArtMarketplace.DAL
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : DbContext, IDataProtectionKeyContext
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
         
@@ -13,6 +14,7 @@ namespace IndieArtMarketplace.DAL
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<ClickLog> ClickLogs { get; set; }
         public DbSet<UploadLog> UploadLogs { get; set; }
+        public DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -3,6 +3,7 @@ using IndieArtMarketplace.DAL;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -36,10 +37,10 @@ builder.Services.Configure<FormOptions>(options =>
     options.MultipartBodyLengthLimit = 10 * 1024 * 1024; // 10MB
 });
 
-// Configure Data Protection
+// Configure Data Protection to use PostgreSQL
 var dataProtectionPath = Path.Combine(builder.Environment.ContentRootPath, "DataProtection-Keys");
 builder.Services.AddDataProtection()
-    .PersistKeysToFileSystem(new DirectoryInfo(dataProtectionPath))
+    .PersistKeysToDbContext<AppDbContext>()
     .SetApplicationName("IndieArtMarketplace");
 
 // Add DbContext with connection validation

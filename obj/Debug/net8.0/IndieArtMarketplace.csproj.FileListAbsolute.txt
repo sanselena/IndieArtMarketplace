@@ -337,3 +337,4 @@ C:\Users\seren\IndieArtMarketplace\obj\Debug\net8.0\refint\IndieArtMarketplace.d
 C:\Users\seren\IndieArtMarketplace\obj\Debug\net8.0\IndieArtMarketplace.pdb
 C:\Users\seren\IndieArtMarketplace\obj\Debug\net8.0\IndieArtMarketplace.genruntimeconfig.cache
 C:\Users\seren\IndieArtMarketplace\obj\Debug\net8.0\ref\IndieArtMarketplace.dll
+C:\Users\seren\IndieArtMarketplace\bin\Debug\net8.0\Microsoft.AspNetCore.DataProtection.EntityFrameworkCore.dll
