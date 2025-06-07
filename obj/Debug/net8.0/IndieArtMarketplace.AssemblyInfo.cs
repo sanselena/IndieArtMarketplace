@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("IndieArtMarketplace")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3ef50acece6a7fb44a82d4253d2bd41379e9ffb8")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+772744bfefc659f3f578e23ddc698a8b8a1867f5")]
 [assembly: System.Reflection.AssemblyProductAttribute("IndieArtMarketplace")]
 [assembly: System.Reflection.AssemblyTitleAttribute("IndieArtMarketplace")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
