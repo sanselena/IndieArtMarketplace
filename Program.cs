@@ -71,6 +71,22 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
+// Add authentication configuration
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme = "Cookies";
+    options.DefaultChallengeScheme = "Cookies";
+})
+.AddCookie("Cookies", options =>
+{
+    options.LoginPath = "/Account/Login";
+    options.LogoutPath = "/Account/Logout";
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+    options.SlidingExpiration = true;
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
@@ -91,6 +107,8 @@ app.UseRouting();
 
 app.UseSession();
 
+// Add authentication configuration
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

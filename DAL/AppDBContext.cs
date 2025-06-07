@@ -29,43 +29,45 @@ namespace IndieArtMarketplace.DAL
             {
                 entity.HasKey(e => e.UserID);
                 entity.Property(e => e.UserID).HasColumnName("userid");
-                entity.Property(e => e.Username).IsRequired().HasColumnName("username");
-                entity.Property(e => e.Email).IsRequired().HasColumnName("email");
-                entity.Property(e => e.Password).IsRequired().HasColumnName("password");
-                entity.Property(e => e.Role).IsRequired().HasColumnName("role");
-                entity.Property(e => e.RegistrationDate).HasColumnName("registrationdate");
+                entity.Property(e => e.Username).HasColumnType("text").IsRequired().HasColumnName("username");
+                entity.Property(e => e.Email).HasColumnType("text").IsRequired().HasColumnName("email");
+                entity.Property(e => e.Password).HasColumnType("text").IsRequired().HasColumnName("password");
+                entity.Property(e => e.Role).HasColumnType("text").IsRequired().HasColumnName("role");
+                entity.Property(e => e.RegistrationDate).HasColumnType("timestamp with time zone").IsRequired().HasColumnName("registrationdate");
             });
 
             modelBuilder.Entity<Artwork>(entity =>
             {
                 entity.HasKey(e => e.ArtworkID);
                 entity.Property(e => e.ArtworkID).HasColumnName("artworkid");
-                entity.Property(e => e.Title).IsRequired().HasColumnName("title");
-                entity.Property(e => e.Description).HasColumnName("description");
-                entity.Property(e => e.Price).HasColumnType("decimal(10,2)").IsRequired().HasColumnName("price");
-                entity.Property(e => e.FileURL).IsRequired().HasColumnName("fileurl");
-                entity.Property(e => e.UploadDate).HasColumnName("uploaddate");
+                entity.Property(e => e.Title).HasColumnType("text").IsRequired().HasColumnName("title");
+                entity.Property(e => e.Description).HasColumnType("text").HasColumnName("description");
+                entity.Property(e => e.Price).HasColumnType("decimal(18,2)").IsRequired().HasColumnName("price");
+                entity.Property(e => e.FileURL).HasColumnType("text").IsRequired().HasColumnName("fileurl");
+                entity.Property(e => e.UploadDate).HasColumnType("timestamp with time zone").IsRequired().HasColumnName("uploaddate");
                 entity.Property(e => e.ArtistID).IsRequired().HasColumnName("artistid");
                 entity.Property(e => e.License).HasColumnName("license");
                 entity.HasOne<User>()
                     .WithMany()
-                    .HasForeignKey(e => e.ArtistID);
+                    .HasForeignKey(e => e.ArtistID)
+                    .OnDelete(DeleteBehavior.Restrict);
             });
 
             modelBuilder.Entity<MusicTrack>(entity =>
             {
                 entity.HasKey(e => e.TrackID);
                 entity.Property(e => e.TrackID).HasColumnName("trackid");
-                entity.Property(e => e.Title).IsRequired().HasColumnName("title");
-                entity.Property(e => e.Description).HasColumnName("description");
-                entity.Property(e => e.Price).HasColumnType("decimal(10,2)").IsRequired().HasColumnName("price");
-                entity.Property(e => e.FileURL).IsRequired().HasColumnName("fileurl");
-                entity.Property(e => e.UploadDate).HasColumnName("uploaddate");
+                entity.Property(e => e.Title).HasColumnType("text").IsRequired().HasColumnName("title");
+                entity.Property(e => e.Description).HasColumnType("text").HasColumnName("description");
+                entity.Property(e => e.Price).HasColumnType("decimal(18,2)").IsRequired().HasColumnName("price");
+                entity.Property(e => e.FileURL).HasColumnType("text").IsRequired().HasColumnName("fileurl");
+                entity.Property(e => e.UploadDate).HasColumnType("timestamp with time zone").IsRequired().HasColumnName("uploaddate");
                 entity.Property(e => e.ArtistID).IsRequired().HasColumnName("artistid");
                 entity.Property(e => e.License).HasColumnName("license");
                 entity.HasOne<User>()
                     .WithMany()
-                    .HasForeignKey(e => e.ArtistID);
+                    .HasForeignKey(e => e.ArtistID)
+                    .OnDelete(DeleteBehavior.Restrict);
             });
 
             modelBuilder.Entity<Transaction>(entity =>
@@ -75,12 +77,14 @@ namespace IndieArtMarketplace.DAL
                 entity.Property(e => e.BuyerID).IsRequired().HasColumnName("buyerid");
                 entity.Property(e => e.ArtworkID).HasColumnName("artworkid");
                 entity.Property(e => e.TrackID).HasColumnName("trackid");
-                entity.Property(e => e.PurchaseDate).HasColumnName("purchasedate");
-                entity.Property(e => e.Amount).HasColumnType("decimal(10,2)").IsRequired().HasColumnName("amount");
+                entity.Property(e => e.PurchaseDate).HasColumnType("timestamp with time zone").IsRequired().HasColumnName("purchasedate");
+                entity.Property(e => e.Amount).HasColumnType("decimal(18,2)").IsRequired().HasColumnName("amount");
+                entity.Property(e => e.Status).HasColumnType("text").IsRequired().HasColumnName("status");
 
                 entity.HasOne<User>()
                     .WithMany()
-                    .HasForeignKey(e => e.BuyerID);
+                    .HasForeignKey(e => e.BuyerID)
+                    .OnDelete(DeleteBehavior.Restrict);
 
                 entity.HasOne<Artwork>()
                     .WithMany()
