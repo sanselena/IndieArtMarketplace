@@ -49,6 +49,14 @@ namespace IndieArtMarketplace.Controllers
         [HttpPost]
         public async Task<IActionResult> UploadArtwork(ArtworkUploadViewModel viewModel)
         {
+            // Always ensure viewModel is not null before proceeding
+            if (viewModel == null)
+            {
+                _logger.LogWarning("UploadArtwork: ViewModel is null upon submission.");
+                ModelState.AddModelError("", "Invalid upload data. Please try again.");
+                return View("Index", new ArtworkUploadViewModel()); // Return new, populated ViewModel
+            }
+
             try
             {
                 var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
@@ -189,7 +197,11 @@ namespace IndieArtMarketplace.Controllers
                 {
                     _logger.LogError(ex, "Error saving artwork to database");
                     ModelState.AddModelError("", "Error saving artwork. Please try again.");
-                    // Repopulate AvailableLicenses on validation failure
+                    // Ensure viewModel is not null before populating AvailableLicenses
+                    if (viewModel == null)
+                    {
+                        viewModel = new ArtworkUploadViewModel();
+                    }
                     viewModel.AvailableLicenses = new List<string>
                     {
                         "All Rights Reserved",
@@ -206,7 +218,11 @@ namespace IndieArtMarketplace.Controllers
             {
                 _logger.LogError(ex, "Unexpected error during artwork upload");
                 ModelState.AddModelError("", "An unexpected error occurred. Please try again.");
-                // Repopulate AvailableLicenses on validation failure
+                // Ensure viewModel is not null before populating AvailableLicenses
+                if (viewModel == null)
+                {
+                    viewModel = new ArtworkUploadViewModel();
+                }
                 viewModel.AvailableLicenses = new List<string>
                 {
                     "All Rights Reserved",
@@ -223,6 +239,14 @@ namespace IndieArtMarketplace.Controllers
         [HttpPost]
         public async Task<IActionResult> UploadMusic(MusicTrackUploadViewModel viewModel)
         {
+            // Always ensure viewModel is not null before proceeding
+            if (viewModel == null)
+            {
+                _logger.LogWarning("UploadMusic: ViewModel is null upon submission.");
+                ModelState.AddModelError("", "Invalid upload data. Please try again.");
+                return View("Index", new ArtworkUploadViewModel()); // Return new, populated ViewModel
+            }
+
             try
             {
                 if (!ModelState.IsValid)
