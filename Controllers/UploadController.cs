@@ -324,7 +324,7 @@ namespace IndieArtMarketplace.Controllers
                 {
                     Title = viewModel.Title,
                     ArtistID = userId,
-                    Genre = viewModel.Genre,
+                    Description = viewModel.Description,
                     Price = viewModel.Price,
                     License = viewModel.License,
                     FileURL = fileUrl,
