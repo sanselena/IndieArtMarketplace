@@ -11,7 +11,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using System.Collections.Generic;
-using ImageKit;
 
 namespace IndieArtMarketplace.Controllers
 {
@@ -21,16 +20,18 @@ namespace IndieArtMarketplace.Controllers
         private readonly UserService _userService;
         private readonly AppDbContext _context;
         private readonly ILogger<UploadController> _logger;
-        private readonly ImageKitClient _imageKitClient;
+        private readonly IBlobStorageService _blobStorageService;
         private const int MaxFileSizeInMB = 10; // 10MB limit
         private const int MaxFileSize = 10 * 1024 * 1024; // 10MB
+        private const string ArtworkContainerName = "artwork";
+        private const string MusicContainerName = "music";
 
-        public UploadController(UserService userService, AppDbContext context, ILogger<UploadController> logger, ImageKitClient imageKitClient)
+        public UploadController(UserService userService, AppDbContext context, ILogger<UploadController> logger, IBlobStorageService blobStorageService)
         {
             _userService = userService;
             _context = context;
             _logger = logger;
-            _imageKitClient = imageKitClient;
+            _blobStorageService = blobStorageService;
         }
 
         public IActionResult Index()
@@ -119,49 +120,19 @@ namespace IndieArtMarketplace.Controllers
                     return View("Index", viewModel);
                 }
 
-                string fileUrl = ""; // Initialize with empty string, will be set by ImageKit
+                string fileUrl = "";
                 if (viewModel.File != null && viewModel.File.Length > 0)
                 {
                     try
                     {
-                        using (var memoryStream = new MemoryStream())
-                        {
-                            await viewModel.File.CopyToAsync(memoryStream);
-                            var fileBytes = memoryStream.ToArray();
-                            var fileName = Path.GetFileName(viewModel.File.FileName);
-
-                            _logger.LogInformation("Attempting to upload file to ImageKit: {FileName}", fileName);
-
-                            var result = await _imageKitClient.Upload(fileBytes, fileName);
-
-                            if (result != null && result.success)
-                            {
-                                fileUrl = result.url; // Use result.url from ImageKit
-                                _logger.LogInformation("Successfully uploaded file to ImageKit. URL: {FileUrl}", fileUrl);
-                            }
-                            else
-                            {
-                                string errorMessage = result?.error?.message ?? "Unknown error during ImageKit upload.";
-                                _logger.LogError("ImageKit upload failed for file {FileName}: {ErrorMessage}", fileName, errorMessage);
-                                ModelState.AddModelError("File", $"Error uploading file to ImageKit: {errorMessage}");
-                                // Repopulate AvailableLicenses on validation failure
-                                viewModel.AvailableLicenses = new List<string>
-                                {
-                                    "All Rights Reserved",
-                                    "Creative Commons Attribution",
-                                    "Creative Commons Attribution-ShareAlike",
-                                    "Creative Commons Attribution-NoDerivatives",
-                                    "Creative Commons Attribution-NonCommercial",
-                                    "Creative Commons Zero (Public Domain)"
-                                };
-                                return View("Index", viewModel);
-                            }
-                        }
+                        var fileName = await _blobStorageService.UploadFileAsync(viewModel.File, ArtworkContainerName);
+                        fileUrl = _blobStorageService.GetBlobUrl(fileName, ArtworkContainerName);
+                        _logger.LogInformation("Successfully uploaded file to Azure Blob Storage. URL: {FileUrl}", fileUrl);
                     }
                     catch (Exception ex)
                     {
-                        _logger.LogError(ex, "Error during ImageKit upload process.");
-                        ModelState.AddModelError("File", "Error uploading file. Please try again.");
+                        _logger.LogError(ex, "Error during Azure Blob Storage upload process for artwork.");
+                        ModelState.AddModelError("File", "Error uploading file to Azure Blob Storage. Please try again.");
                         // Repopulate AvailableLicenses on validation failure
                         viewModel.AvailableLicenses = new List<string>
                         {
@@ -253,7 +224,7 @@ namespace IndieArtMarketplace.Controllers
                     "Creative Commons Attribution-NonCommercial",
                     "Creative Commons Zero (Public Domain)"
                 };
-            return View("Index", viewModel);
+                return View("Index", viewModel);
             }
         }
 
@@ -266,126 +237,104 @@ namespace IndieArtMarketplace.Controllers
             {
                 _logger.LogWarning("UploadMusic: ViewModel is null upon submission - Model Binding Failed.");
                 ModelState.AddModelError("", "Invalid upload data received. Please ensure all fields are correctly filled and try again.");
-                // When returning to Index from UploadMusic, always provide an ArtworkUploadViewModel
-                var artworkViewModel = new ArtworkUploadViewModel();
-                artworkViewModel.AvailableLicenses = new List<string>
-                {
-                    "All Rights Reserved",
-                    "Creative Commons Attribution",
-                    "Creative Commons Attribution-ShareAlike",
-                    "Creative Commons Attribution-NoDerivatives",
-                    "Creative Commons Attribution-NonCommercial",
-                    "Creative Commons Zero (Public Domain)"
-                };
-                return View("Index", artworkViewModel);
+                return View("Index", new MusicTrackUploadViewModel());
             }
 
             try
             {
-                if (!ModelState.IsValid)
-                {
-                    _logger.LogWarning("Invalid model state during music track upload");
-                    // Create a new ArtworkUploadViewModel to correctly display the view
-                    var artworkViewModel = new ArtworkUploadViewModel();
-                    // Repopulate AvailableLicenses for the new view model
-                    artworkViewModel.AvailableLicenses = new List<string>
-                    {
-                        "All Rights Reserved",
-                        "Creative Commons Attribution",
-                        "Creative Commons Attribution-ShareAlike",
-                        "Creative Commons Attribution-NoDerivatives",
-                        "Creative Commons Attribution-NonCommercial",
-                        "Creative Commons Zero (Public Domain)"
-                    };
-                    // Transfer model state errors to the new view model
-                    return View("Index", artworkViewModel);
-                }
-
-                if (viewModel.File == null || viewModel.File.Length == 0)
-                {
-                    ModelState.AddModelError("File", "Please select a file to upload");
-                    // Repopulate AvailableLicenses on validation failure
-                    var artworkViewModel = new ArtworkUploadViewModel();
-                    artworkViewModel.AvailableLicenses = new List<string>
-                    {
-                        "All Rights Reserved",
-                        "Creative Commons Attribution",
-                        "Creative Commons Attribution-ShareAlike",
-                        "Creative Commons Attribution-NoDerivatives",
-                        "Creative Commons Attribution-NonCommercial",
-                        "Creative Commons Zero (Public Domain)"
-                    };
-                    // Transfer model state errors to the new view model
-                    return View("Index", artworkViewModel);
-                }
-
-                if (viewModel.File.Length > MaxFileSize)
-                {
-                    ModelState.AddModelError("File", $"File size exceeds the maximum limit of {MaxFileSize / (1024 * 1024)}MB");
-                    // Repopulate AvailableLicenses on validation failure
-                    var artworkViewModel = new ArtworkUploadViewModel();
-                    artworkViewModel.AvailableLicenses = new List<string>
-                    {
-                        "All Rights Reserved",
-                        "Creative Commons Attribution",
-                        "Creative Commons Attribution-ShareAlike",
-                        "Creative Commons Attribution-NoDerivatives",
-                        "Creative Commons Attribution-NonCommercial",
-                        "Creative Commons Zero (Public Domain)"
-                    };
-                    // Transfer model state errors to the new view model
-                    return View("Index", artworkViewModel);
-                }
-
-                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier); // Retrieve from claims
+                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
                 if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out var userId))
                 {
                     _logger.LogWarning("User ID not found in claims or invalid format for UploadMusic.");
                     return Unauthorized();
                 }
 
-                var uploadsDir = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
-                
-                if (!Directory.Exists(uploadsDir))
+                if (!ModelState.IsValid)
                 {
-                    _logger.LogInformation("Creating uploads directory at {Path}", uploadsDir);
-                    Directory.CreateDirectory(uploadsDir);
+                    _logger.LogWarning("Invalid model state for music upload");
+                    viewModel.AvailableLicenses = new List<string>
+                    {
+                        "All Rights Reserved",
+                        "Creative Commons Attribution",
+                        "Creative Commons Attribution-ShareAlike",
+                        "Creative Commons Attribution-NoDerivatives",
+                        "Creative Commons Attribution-NonCommercial",
+                        "Creative Commons Zero (Public Domain)"
+                    };
+                    return View("Index", viewModel);
                 }
 
-                // Sanitize filename: convert to lowercase, replace spaces with hyphens, remove invalid chars
-                var originalMusicFileName = Path.GetFileNameWithoutExtension(viewModel.File.FileName);
-                var musicFileExtension = Path.GetExtension(viewModel.File.FileName);
-                var sanitizedMusicFileName = string.Join("-", originalMusicFileName.Split(Path.GetInvalidFileNameChars()))
-                                            .Replace(" ", "-")
-                                            .ToLowerInvariant();
-                var uniqueMusicFileName = $"{Guid.NewGuid()}_{sanitizedMusicFileName}{musicFileExtension}";
-
-                var filePath = Path.Combine(uploadsDir, uniqueMusicFileName);
-
-                using (var stream = new FileStream(filePath, FileMode.Create))
+                if (viewModel.File == null || viewModel.File.Length == 0)
                 {
-                    await viewModel.File.CopyToAsync(stream);
+                    ModelState.AddModelError("File", "Please select a music file to upload.");
+                    viewModel.AvailableLicenses = new List<string>
+                    {
+                        "All Rights Reserved",
+                        "Creative Commons Attribution",
+                        "Creative Commons Attribution-ShareAlike",
+                        "Creative Commons Attribution-NoDerivatives",
+                        "Creative Commons Attribution-NonCommercial",
+                        "Creative Commons Zero (Public Domain)"
+                    };
+                    return View("Index", viewModel);
                 }
 
-                _logger.LogInformation("File saved successfully at {Path} with name {FileName}", filePath, uniqueMusicFileName);
+                if (viewModel.File.Length > MaxFileSize)
+                {
+                    ModelState.AddModelError("File", $"File size exceeds the maximum limit of {MaxFileSize / (1024 * 1024)}MB.");
+                    viewModel.AvailableLicenses = new List<string>
+                    {
+                        "All Rights Reserved",
+                        "Creative Commons Attribution",
+                        "Creative Commons Attribution-ShareAlike",
+                        "Creative Commons Attribution-NoDerivatives",
+                        "Creative Commons Attribution-NonCommercial",
+                        "Creative Commons Zero (Public Domain)"
+                    };
+                    return View("Index", viewModel);
+                }
 
-                var fileUrl = $"/uploads/{uniqueMusicFileName}";
+                string fileUrl = "";
+                if (viewModel.File != null && viewModel.File.Length > 0)
+                {
+                    try
+                    {
+                        var fileName = await _blobStorageService.UploadFileAsync(viewModel.File, MusicContainerName);
+                        fileUrl = _blobStorageService.GetBlobUrl(fileName, MusicContainerName);
+                        _logger.LogInformation("Successfully uploaded music file to Azure Blob Storage. URL: {FileUrl}", fileUrl);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex, "Error during Azure Blob Storage upload process for music.");
+                        ModelState.AddModelError("File", "Error uploading music file to Azure Blob Storage. Please try again.");
+                        viewModel.AvailableLicenses = new List<string>
+                        {
+                            "All Rights Reserved",
+                            "Creative Commons Attribution",
+                            "Creative Commons Attribution-ShareAlike",
+                            "Creative Commons Attribution-NoDerivatives",
+                            "Creative Commons Attribution-NonCommercial",
+                            "Creative Commons Zero (Public Domain)"
+                        };
+                        return View("Index", viewModel);
+                    }
+                }
+
                 var musicTrack = new MusicTrack
                 {
-                    ArtistID = userId,
                     Title = viewModel.Title,
-                    Description = viewModel.Description,
-                    FileURL = fileUrl,
+                    ArtistID = userId,
+                    Genre = viewModel.Genre,
                     Price = viewModel.Price,
                     License = viewModel.License,
-                    UploadDate = DateTime.UtcNow // Ensure UTC time
+                    FileURL = fileUrl,
+                    UploadDate = DateTime.UtcNow
                 };
 
                 try
                 {
                     await _userService.CreateMusicTrack(musicTrack);
 
-                    // Log the music track upload
                     var uploadLog = new UploadLog
                     {
                         UserId = userId,
@@ -397,24 +346,25 @@ namespace IndieArtMarketplace.Controllers
                     _context.UploadLogs.Add(uploadLog);
                     await _context.SaveChangesAsync();
 
-                // Update user role to Artist if they were a Buyer
-                var user = _userService.GetAllUsers().FirstOrDefault(u => u.UserID == userId);
-                if (user != null && user.Role == "Buyer")
-                {
-                    user.Role = "Artist";
-                    _userService.UpdateUser(user);
-                }
+                    var user = _userService.GetAllUsers().FirstOrDefault(u => u.UserID == userId);
+                    if (user != null && user.Role == "Buyer")
+                    {
+                        user.Role = "Artist";
+                        _userService.UpdateUser(user);
+                    }
 
                     _logger.LogInformation("Successfully uploaded music track {Title} by user {UserId}", musicTrack.Title, userId);
-                return RedirectToAction("Success", new { type = "music" });
+                    return RedirectToAction("Success", new { type = "music" });
                 }
                 catch (Exception ex)
                 {
                     _logger.LogError(ex, "Error saving music track to database");
                     ModelState.AddModelError("", "Error saving music track. Please try again.");
-                    // Repopulate AvailableLicenses on validation failure
-                    var artworkViewModel = new ArtworkUploadViewModel();
-                    artworkViewModel.AvailableLicenses = new List<string>
+                    if (viewModel == null)
+                    {
+                        viewModel = new MusicTrackUploadViewModel();
+                    }
+                    viewModel.AvailableLicenses = new List<string>
                     {
                         "All Rights Reserved",
                         "Creative Commons Attribution",
@@ -423,17 +373,18 @@ namespace IndieArtMarketplace.Controllers
                         "Creative Commons Attribution-NonCommercial",
                         "Creative Commons Zero (Public Domain)"
                     };
-                    // Transfer model state errors to the new view model
-                    return View("Index", artworkViewModel);
+                    return View("Index", viewModel);
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Unexpected error during music track upload");
+                _logger.LogError(ex, "Unexpected error during music upload");
                 ModelState.AddModelError("", "An unexpected error occurred. Please try again.");
-                // Repopulate AvailableLicenses on validation failure
-                var artworkViewModel = new ArtworkUploadViewModel();
-                artworkViewModel.AvailableLicenses = new List<string>
+                if (viewModel == null)
+                {
+                    viewModel = new MusicTrackUploadViewModel();
+                }
+                viewModel.AvailableLicenses = new List<string>
                 {
                     "All Rights Reserved",
                     "Creative Commons Attribution",
@@ -442,14 +393,12 @@ namespace IndieArtMarketplace.Controllers
                     "Creative Commons Attribution-NonCommercial",
                     "Creative Commons Zero (Public Domain)"
                 };
-                // Transfer model state errors to the new view model
-                return View("Index", artworkViewModel);
+                return View("Index", viewModel);
             }
         }
 
         public IActionResult Success(string type)
         {
-            ViewBag.Type = type;
             return View();
         }
     }
