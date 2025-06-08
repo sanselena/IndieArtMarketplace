@@ -2,8 +2,18 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /app
 
-# Proje dosyalarını kopyala ve publish et
-COPY . . 
+# Copy .csproj and .sln files and restore dependencies
+COPY IndieArtMarketplace.csproj ./
+COPY IndieArtMarketplace.sln ./
+RUN dotnet restore
+
+# Copy the rest of the application files
+COPY . .
+
+# Copy wwwroot separately to ensure it's included
+COPY wwwroot/ ./wwwroot/
+
+# Publish the application
 RUN dotnet publish -c Release -o out
 
 # Runtime aşaması
