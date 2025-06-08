@@ -50,7 +50,9 @@ namespace IndieArtMarketplace.Business.Services
 
         public string GetBlobUrl(string fileName, string containerName)
         {
-            return $"{_baseUrl}/{containerName}/{fileName}";
+            var containerClient = _blobServiceClient.GetBlobContainerClient(containerName);
+            var blobClient = containerClient.GetBlobClient(fileName);
+            return blobClient.Uri.ToString();
         }
     }
 } 
