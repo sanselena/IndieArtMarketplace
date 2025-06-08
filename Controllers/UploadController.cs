@@ -137,7 +137,7 @@ namespace IndieArtMarketplace.Controllers
                         }
                         
                         fileUrl = "/uploads/" + fileName;
-                        _logger.LogInformation("Successfully saved file to {Path}", filePath);
+                        _logger.LogInformation("Successfully saved file to {Path} with name {FileName}", filePat, FileName);
                     }
                     catch (Exception ex)
                     {
@@ -341,7 +341,7 @@ namespace IndieArtMarketplace.Controllers
                     await viewModel.File.CopyToAsync(stream);
                 }
 
-                _logger.LogInformation("File saved successfully at {Path}", filePath);
+                _logger.LogInformation("File saved successfully at {Path} with name {FileName}", filePath, fileName);
 
                 var fileUrl = $"/uploads/{fileName}";
                 var musicTrack = new MusicTrack
