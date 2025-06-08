@@ -137,7 +137,7 @@ namespace IndieArtMarketplace.Controllers
                         }
                         
                         fileUrl = "/uploads/" + fileName;
-                        _logger.LogInformation("Successfully saved file to {Path} with name {FileName}", filePat, FileName);
+                        _logger.LogInformation("Successfully saved file to {Path} with name {FileName}", filePath, fileName);
                     }
                     catch (Exception ex)
                     {
