@@ -14,10 +14,20 @@ using Microsoft.AspNetCore.Http.Features;
 using System.IO;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
+using ImageKit;
+using IndieArtMarketplace.Models;
 
 // Adding a dummy comment to force a new deploy on Render.com
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Configure ImageKit settings
+builder.Services.Configure<ImageKitSettings>(builder.Configuration.GetSection("ImageKit"));
+builder.Services.AddSingleton(sp =>
+{
+    var imageKitSettings = sp.GetRequiredService<Microsoft.Extensions.Options.IOptions<ImageKitSettings>>().Value;
+    return new ImageKitClient(imageKitSettings.ImageKitPublicKey, imageKitSettings.ImageKitPrivateKey, imageKitSettings.ImageKitUrlEndpoint);
+});
 
 // Configure logging
 builder.Logging.ClearProviders();

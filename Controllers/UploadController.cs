@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using System.Collections.Generic;
+using ImageKit;
 
 namespace IndieArtMarketplace.Controllers
 {
@@ -20,14 +21,16 @@ namespace IndieArtMarketplace.Controllers
         private readonly UserService _userService;
         private readonly AppDbContext _context;
         private readonly ILogger<UploadController> _logger;
+        private readonly ImageKitClient _imageKitClient;
         private const int MaxFileSizeInMB = 10; // 10MB limit
         private const int MaxFileSize = 10 * 1024 * 1024; // 10MB
 
-        public UploadController(UserService userService, AppDbContext context, ILogger<UploadController> logger)
+        public UploadController(UserService userService, AppDbContext context, ILogger<UploadController> logger, ImageKitClient imageKitClient)
         {
             _userService = userService;
             _context = context;
             _logger = logger;
+            _imageKitClient = imageKitClient;
         }
 
         public IActionResult Index()
@@ -116,40 +119,49 @@ namespace IndieArtMarketplace.Controllers
                     return View("Index", viewModel);
                 }
 
-                string fileUrl = "/uploads/default.jpg"; // Default value
+                string fileUrl = ""; // Initialize with empty string, will be set by ImageKit
                 if (viewModel.File != null && viewModel.File.Length > 0)
                 {
                     try
                     {
-                        var uploads = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
-                        if (!Directory.Exists(uploads))
+                        using (var memoryStream = new MemoryStream())
                         {
-                            Directory.CreateDirectory(uploads);
-                            _logger.LogInformation("Created uploads directory at {Path}", uploads);
-                        }
+                            await viewModel.File.CopyToAsync(memoryStream);
+                            var fileBytes = memoryStream.ToArray();
+                            var fileName = Path.GetFileName(viewModel.File.FileName);
 
-                        // Sanitize filename: convert to lowercase, replace spaces with hyphens, remove invalid chars
-                        var originalFileName = Path.GetFileNameWithoutExtension(viewModel.File.FileName);
-                        var fileExtension = Path.GetExtension(viewModel.File.FileName);
-                        var sanitizedFileName = string.Join("-", originalFileName.Split(Path.GetInvalidFileNameChars()))
-                                                .Replace(" ", "-")
-                                                .ToLowerInvariant();
-                        var uniqueFileName = $"{Guid.NewGuid()}_{sanitizedFileName}{fileExtension}";
-                        
-                        var filePath = Path.Combine(uploads, uniqueFileName);
-                        
-                        using (var stream = new FileStream(filePath, FileMode.Create))
-                        {
-                            await viewModel.File.CopyToAsync(stream);
+                            _logger.LogInformation("Attempting to upload file to ImageKit: {FileName}", fileName);
+
+                            var result = await _imageKitClient.Upload(fileBytes, fileName);
+
+                            if (result != null && result.success)
+                            {
+                                fileUrl = result.url; // Use result.url from ImageKit
+                                _logger.LogInformation("Successfully uploaded file to ImageKit. URL: {FileUrl}", fileUrl);
+                            }
+                            else
+                            {
+                                string errorMessage = result?.error?.message ?? "Unknown error during ImageKit upload.";
+                                _logger.LogError("ImageKit upload failed for file {FileName}: {ErrorMessage}", fileName, errorMessage);
+                                ModelState.AddModelError("File", $"Error uploading file to ImageKit: {errorMessage}");
+                                // Repopulate AvailableLicenses on validation failure
+                                viewModel.AvailableLicenses = new List<string>
+                                {
+                                    "All Rights Reserved",
+                                    "Creative Commons Attribution",
+                                    "Creative Commons Attribution-ShareAlike",
+                                    "Creative Commons Attribution-NoDerivatives",
+                                    "Creative Commons Attribution-NonCommercial",
+                                    "Creative Commons Zero (Public Domain)"
+                                };
+                                return View("Index", viewModel);
+                            }
                         }
-                        
-                        fileUrl = "/uploads/" + uniqueFileName;
-                        _logger.LogInformation("Successfully saved file to {Path} with name {FileName}", filePath, uniqueFileName);
                     }
                     catch (Exception ex)
                     {
-                        _logger.LogError(ex, "Error saving file");
-                        ModelState.AddModelError("File", "Error saving file. Please try again.");
+                        _logger.LogError(ex, "Error during ImageKit upload process.");
+                        ModelState.AddModelError("File", "Error uploading file. Please try again.");
                         // Repopulate AvailableLicenses on validation failure
                         viewModel.AvailableLicenses = new List<string>
                         {
