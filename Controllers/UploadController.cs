@@ -224,7 +224,7 @@ namespace IndieArtMarketplace.Controllers
                     "Creative Commons Attribution-NonCommercial",
                     "Creative Commons Zero (Public Domain)"
                 };
-                return View("Index", viewModel);
+            return View("Index", viewModel);
             }
         }
 
@@ -346,15 +346,15 @@ namespace IndieArtMarketplace.Controllers
                     _context.UploadLogs.Add(uploadLog);
                     await _context.SaveChangesAsync();
 
-                    var user = _userService.GetAllUsers().FirstOrDefault(u => u.UserID == userId);
-                    if (user != null && user.Role == "Buyer")
-                    {
-                        user.Role = "Artist";
-                        _userService.UpdateUser(user);
-                    }
+                var user = _userService.GetAllUsers().FirstOrDefault(u => u.UserID == userId);
+                if (user != null && user.Role == "Buyer")
+                {
+                    user.Role = "Artist";
+                    _userService.UpdateUser(user);
+                }
 
                     _logger.LogInformation("Successfully uploaded music track {Title} by user {UserId}", musicTrack.Title, userId);
-                    return RedirectToAction("Success", new { type = "music" });
+                return RedirectToAction("Success", new { type = "music" });
                 }
                 catch (Exception ex)
                 {
@@ -393,7 +393,7 @@ namespace IndieArtMarketplace.Controllers
                     "Creative Commons Attribution-NonCommercial",
                     "Creative Commons Zero (Public Domain)"
                 };
-                return View("Index", viewModel);
+            return View("Index", viewModel);
             }
         }
 
