@@ -5,6 +5,7 @@ WORKDIR /app
 # Copy .csproj and .sln files and restore dependencies
 COPY IndieArtMarketplace.csproj ./
 COPY IndieArtMarketplace.sln ./
+RUN dotnet nuget locals all --clear
 RUN dotnet restore
 
 # Copy the rest of the application files
