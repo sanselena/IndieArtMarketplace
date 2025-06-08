@@ -33,11 +33,11 @@
     </div>
 
     <div id="commissionText" style="display: none;" class="alert alert-info mt-3 custom-alert-text">
-        here's the description of how commissions work EDIT THIS
+        -Soon to be added- Ask for a personalized commission from your favorite artist, with just the click of a button!
     </div>
 
     <div id="helpText" style="display: none;" class="alert alert-info mt-3 custom-alert-text">
-        here's the description of how to bagista bulunmak EDIT THIS
+        -Soon to be added- Buy a coffee, or offer a huge tip for even more coffee, to your favorite artist, with just the click of a button!S
     </div>
 
 </div>
@@ -45,11 +45,33 @@
 
 @section Scripts {
     <script>
+        function logButtonClick(buttonType) {
+            const data = {
+                buttonType: buttonType
+                // UserId and SessionId will be added on the backend if available
+            };
+
+            fetch('/api/Log/click', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            }).then(response => {
+                if (!response.ok) {
+                    console.error('Failed to log button click:', response.statusText);
+                }
+            }).catch(error => {
+                console.error('Error logging button click:', error);
+            });
+        }
+
         function toggleCommissionText() {
             var commissionDiv = document.getElementById('commissionText');
             if (commissionDiv.style.display === 'none') {
                 commissionDiv.style.display = 'block';
                 document.getElementById('helpText').style.display = 'none'; // Hide other text
+                logButtonClick('Commission'); // Log the click
             } else {
                 commissionDiv.style.display = 'none';
             }
@@ -60,6 +82,7 @@
             if (helpDiv.style.display === 'none') {
                 helpDiv.style.display = 'block';
                 document.getElementById('commissionText').style.display = 'none'; // Hide other text
+                logButtonClick('Help your fellow artist'); // Log the click
             } else {
                 helpDiv.style.display = 'none';
             }

@@ -17,71 +17,75 @@ build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = IndieArtMarketplace
 build_property.RootNamespace = IndieArtMarketplace
-build_property.ProjectDir = C:\Users\seren\source\repos\sanselena\IndieArtMarketplace\
+build_property.ProjectDir = C:\Users\seren\IndieArtMarketplace\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 8.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\seren\source\repos\sanselena\IndieArtMarketplace
+build_property.MSBuildProjectDirectory = C:\Users\seren\IndieArtMarketplace
 build_property._RazorSourceGeneratorDebug = 
 
-[C:/Users/seren/source/repos/sanselena/IndieArtMarketplace/Views/Browse/Details.cshtml]
+[C:/Users/seren/IndieArtMarketplace/Views/Browse/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQnJvd3NlXERldGFpbHMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/seren/source/repos/sanselena/IndieArtMarketplace/Views/Browse/Index.cshtml]
+[C:/Users/seren/IndieArtMarketplace/Views/Browse/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQnJvd3NlXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/seren/source/repos/sanselena/IndieArtMarketplace/Views/Browse/PurchaseSuccess.cshtml]
+[C:/Users/seren/IndieArtMarketplace/Views/Browse/PurchaseSuccess.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQnJvd3NlXFB1cmNoYXNlU3VjY2Vzcy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/seren/source/repos/sanselena/IndieArtMarketplace/Views/Home/Index.cshtml]
+[C:/Users/seren/IndieArtMarketplace/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/seren/source/repos/sanselena/IndieArtMarketplace/Views/Home/Privacy.cshtml]
+[C:/Users/seren/IndieArtMarketplace/Views/Home/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/seren/source/repos/sanselena/IndieArtMarketplace/Views/Shared/Error.cshtml]
+[C:/Users/seren/IndieArtMarketplace/Views/Premium/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJlbWl1bVxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/seren/IndieArtMarketplace/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/seren/source/repos/sanselena/IndieArtMarketplace/Views/Shared/_ValidationScriptsPartial.cshtml]
+[C:/Users/seren/IndieArtMarketplace/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/seren/source/repos/sanselena/IndieArtMarketplace/Views/Upload/Index.cshtml]
+[C:/Users/seren/IndieArtMarketplace/Views/Upload/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXBsb2FkXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/seren/source/repos/sanselena/IndieArtMarketplace/Views/Upload/Success.cshtml]
+[C:/Users/seren/IndieArtMarketplace/Views/Upload/Success.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXBsb2FkXFN1Y2Nlc3MuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/seren/source/repos/sanselena/IndieArtMarketplace/Views/User/Login.cshtml]
+[C:/Users/seren/IndieArtMarketplace/Views/User/Login.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlclxMb2dpbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/seren/source/repos/sanselena/IndieArtMarketplace/Views/User/Profile.cshtml]
+[C:/Users/seren/IndieArtMarketplace/Views/User/Profile.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlclxQcm9maWxlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/seren/source/repos/sanselena/IndieArtMarketplace/Views/User/Register.cshtml]
+[C:/Users/seren/IndieArtMarketplace/Views/User/Register.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlclxSZWdpc3Rlci5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/seren/source/repos/sanselena/IndieArtMarketplace/Views/_ViewImports.cshtml]
+[C:/Users/seren/IndieArtMarketplace/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/seren/source/repos/sanselena/IndieArtMarketplace/Views/_ViewStart.cshtml]
+[C:/Users/seren/IndieArtMarketplace/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/seren/source/repos/sanselena/IndieArtMarketplace/Views/Shared/_Layout.cshtml]
+[C:/Users/seren/IndieArtMarketplace/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-bvieeaz9c9

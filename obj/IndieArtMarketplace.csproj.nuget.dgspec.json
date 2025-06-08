@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\seren\\source\\repos\\sanselena\\IndieArtMarketplace\\IndieArtMarketplace.csproj": {}
+    "C:\\Users\\seren\\IndieArtMarketplace\\IndieArtMarketplace.csproj": {}
   },
   "projects": {
-    "C:\\Users\\seren\\source\\repos\\sanselena\\IndieArtMarketplace\\IndieArtMarketplace.csproj": {
+    "C:\\Users\\seren\\IndieArtMarketplace\\IndieArtMarketplace.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\seren\\source\\repos\\sanselena\\IndieArtMarketplace\\IndieArtMarketplace.csproj",
+        "projectUniqueName": "C:\\Users\\seren\\IndieArtMarketplace\\IndieArtMarketplace.csproj",
         "projectName": "IndieArtMarketplace",
-        "projectPath": "C:\\Users\\seren\\source\\repos\\sanselena\\IndieArtMarketplace\\IndieArtMarketplace.csproj",
+        "projectPath": "C:\\Users\\seren\\IndieArtMarketplace\\IndieArtMarketplace.csproj",
         "packagesPath": "C:\\Users\\seren\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\seren\\source\\repos\\sanselena\\IndieArtMarketplace\\obj\\",
+        "outputPath": "C:\\Users\\seren\\IndieArtMarketplace\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -50,6 +50,10 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "Microsoft.AspNetCore.DataProtection.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",

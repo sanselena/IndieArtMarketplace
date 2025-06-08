@@ -51,6 +51,42 @@
                 </div>
             </div>
 
+            <!-- Uploaded Music Tracks Section -->
+            <div class="card bg-dark text-light border-primary mb-4">
+                <div class="card-header">
+                    <h4>My Music Tracks</h4>
+                </div>
+                <div class="card-body">
+                    @if (ViewBag.MusicTracks != null && ViewBag.MusicTracks.Count > 0)
+                    {
+                        <div class="row">
+                            @foreach (var musicTrack in ViewBag.MusicTracks)
+                            {
+                                <div class="col-md-6 mb-3">
+                                    <div class="card bg-dark text-light border-primary">
+                                        <img src="/images/default-music-artwork.png" class="card-img-top" alt="Default Music Image" style="max-height:200px;object-fit:cover;" asp-append-version="true" />
+                                        <div class="card-body">
+                                            <h5 class="card-title">@musicTrack.Title</h5>
+                                            <p class="card-text">@musicTrack.Description</p>
+                                            <p class="card-text">Price: $@musicTrack.Price</p>
+                                            <p class="card-text">License: @musicTrack.License</p>
+                                            <audio controls class="mb-3 w-100">
+                                                <source src="@musicTrack.FileURL" type="audio/mpeg" />
+                                                Your browser does not support the audio element.
+                                            </audio>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <p>No music tracks uploaded yet.</p>
+                    }
+                </div>
+            </div>
+
             <!-- Purchase History Section -->
             <div class="card bg-dark text-light border-primary">
                 <div class="card-header">

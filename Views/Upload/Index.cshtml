@@ -38,7 +38,7 @@
                                     <label asp-for="License" class="form-label">License</label>
                                     <select asp-for="License" class="form-select bg-dark text-light border-primary" required>
                                         <option value="">Select a license...</option>
-                                        @foreach (var license in Model.AvailableLicenses)
+                                        @foreach (var license in Model.AvailableLicenses ?? Enumerable.Empty<string>())
                                         {
                                             <option value="@license">@license</option>
                                         }
@@ -71,7 +71,7 @@
                                     <label asp-for="License" class="form-label">License</label>
                                     <select asp-for="License" class="form-select bg-dark text-light border-primary" required>
                                         <option value="">Select a license...</option>
-                                        @foreach (var license in Model.AvailableLicenses)
+                                        @foreach (var license in Model.AvailableLicenses ?? Enumerable.Empty<string>())
                                         {
                                             <option value="@license">@license</option>
                                         }

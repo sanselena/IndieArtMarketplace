@@ -2,8 +2,50 @@ using IndieArtMarketplace.Business.Services;
 using IndieArtMarketplace.DAL;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.AspNetCore.Http.Features;
+using System.IO;
+using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Logging;
+
+// Adding a dummy comment to force a new deploy on Render.com
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Configure logging
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+builder.Logging.AddDebug();
+builder.Logging.SetMinimumLevel(LogLevel.Information);
+
+// Configure file upload limits
+builder.Services.Configure<IISServerOptions>(options =>
+{
+    options.MaxRequestBodySize = 10 * 1024 * 1024; // 10MB
+});
+
+builder.Services.Configure<KestrelServerOptions>(options =>
+{
+    options.Limits.MaxRequestBodySize = 10 * 1024 * 1024; // 10MB
+});
+
+builder.Services.Configure<FormOptions>(options =>
+{
+    options.MultipartBodyLengthLimit = 10 * 1024 * 1024; // 10MB
+});
+
+// Configure Data Protection to use PostgreSQL
+var dataProtectionPath = Path.Combine(builder.Environment.ContentRootPath, "DataProtection-Keys");
+builder.Services.AddDataProtection()
+    .PersistKeysToDbContext<AppDbContext>()
+    .SetApplicationName("IndieArtMarketplace");
 
 // Add DbContext with connection validation
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -34,10 +76,34 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
+// Add authentication configuration
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme = "Cookies";
+    options.DefaultChallengeScheme = "Cookies";
+})
+.AddCookie("Cookies", options =>
+{
+    options.LoginPath = "/User/Login";
+    options.LogoutPath = "/User/Logout";
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+    options.SlidingExpiration = true;
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+
+// Add logging for WebRootPath and uploads directory
+var logger = app.Services.GetRequiredService<ILogger<Program>>();
+logger.LogInformation("WebRootPath: {WebRootPath}", builder.Environment.WebRootPath);
+
+var uploadsPath = Path.Combine(builder.Environment.WebRootPath, "uploads");
+logger.LogInformation("Expected uploads directory path: {UploadsPath}", uploadsPath);
+logger.LogInformation("Does uploads directory exist? {Exists}", Directory.Exists(uploadsPath));
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -48,12 +114,22 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseStaticFiles();
+app.UseStaticFiles(); // This serves files from wwwroot
+
+// Explicitly serve files from the 'uploads' directory within wwwroot
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(builder.Environment.WebRootPath, "uploads")),
+    RequestPath = "/uploads"
+});
 
 app.UseRouting();
 
 app.UseSession();
 
+// Add authentication configuration
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
@@ -73,8 +149,9 @@ try
 }
 catch (Exception ex)
 {
-    Console.WriteLine($"Database connection failed: {ex.Message}");
-    // Don't throw here, just log the error
+    Console.WriteLine($"Database operation failed during startup: {ex.Message}");
+    // Depending on severity, you might want to re-throw in production
+    // throw; // Uncomment to halt startup on migration failure
 }
 
 app.Run();

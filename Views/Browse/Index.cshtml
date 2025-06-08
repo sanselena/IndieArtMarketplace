@@ -31,61 +31,81 @@
             var isArtwork = item is Artwork;
             var artwork = isArtwork ? (Artwork)item : null;
             var music = !isArtwork ? (MusicTrack)item : null;
-            <div class="col">
-                <div class="card h-100 bg-dark text-light border-primary">
-                    @if (isArtwork)
-                    {
-                        <img src="@artwork.FileURL" class="card-img-top" alt="Artwork Image" style="max-height:200px;object-fit:cover;" />
-                    }
-                    else // Music Track
-                    {
-                        <img src="/images/default-music-artwork.png" class="card-img-top" alt="Default Music Image" style="max-height:200px;object-fit:cover;" asp-append-version="true" />
-                    }
-                    
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            @if (!isArtwork)
-                            {
-                                <i class="fas fa-music me-2"></i>
-                            }
-                            @(isArtwork ? artwork.Title : music.Title)
-                        </h5>
-                        <p class="card-text">
-                            <small class="text-muted">
-                                @(isArtwork ? "Artwork" : "Music Track")
-                            </small>
-                        </p>
-                        <p class="card-text">
-                            @if (isArtwork)
-                            {
-                                @artwork.Description
-                            }
-                            else
-                            {
-                                @music.Description
-                            }
-                        </p>
-                        <p class="card-text">
-                            <strong>Price: $@(isArtwork ? artwork.Price : music.Price)</strong>
-                        </p>
-                        <p class="card-text">
-                             <strong>Artist: @artistName</strong>
-                        </p>
-                         <p class="card-text">
-                             <strong>License: @(isArtwork ? artwork.License : music.License)</strong>
-                         </p>
-                        @if (!isArtwork)
+            
+            @* Add null check here for item/artwork/music before rendering *@
+            if (item != null) 
+            {
+                <div class="col">
+                    <div class="card h-100 bg-dark text-light border-primary">
+                        @if (isArtwork && artwork != null)
                         {
-                             <audio controls class="mb-3 w-100">
-                                 <source src="@music.FileURL" type="audio/mpeg" />
-                                 Your browser does not support the audio element.
-                             </audio>
+                            <img src="@artwork.FileURL" class="card-img-top" alt="Artwork Image" style="max-height:200px;object-fit:cover;" />
                         }
-                        <a href="@Url.Action("Details", new { id = isArtwork ? artwork.ArtworkID : music.TrackID, type = isArtwork ? "art" : "music" })" 
-                           class="btn btn-primary w-100">View Details</a>
+                        else if (!isArtwork && music != null) // Music Track
+                        {
+                            <img src="/images/default-music-artwork.png" class="card-img-top" alt="Default Music Image" style="max-height:200px;object-fit:cover;" asp-append-version="true" />
+                        }
+                        
+                        @if (artwork != null || music != null) // Ensure at least one is not null before showing card body
+                        {
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    @if (!isArtwork && music != null)
+                                    {
+                                        <i class="fas fa-music me-2"></i>
+                                    }
+                                    @(isArtwork && artwork != null ? artwork.Title : (!isArtwork && music != null ? music.Title : "N/A"))
+                                </h5>
+                                <p class="card-text">
+                                    <small class="text-muted">
+                                        @(isArtwork && artwork != null ? "Artwork" : (!isArtwork && music != null ? "Music Track" : "N/A"))
+                                    </small>
+                                </p>
+                                <p class="card-text">
+                                    @if (isArtwork && artwork != null)
+                                    {
+                                        @artwork.Description
+                                    }
+                                    else if (!isArtwork && music != null)
+                                    {
+                                        @music.Description
+                                    }
+                                    else
+                                    {
+                                        @:N/A
+                                    }
+                                </p>
+                                <p class="card-text">
+                                    <strong>Price: $@(isArtwork && artwork != null ? artwork.Price.ToString("F2") : (!isArtwork && music != null ? music.Price.ToString("F2") : "N/A"))</strong>
+                                </p>
+                                <p class="card-text">
+                                     <strong>Artist: @(artistName ?? "N/A")</strong>
+                                </p>
+                                 <p class="card-text">
+                                     <strong>License: @(isArtwork && artwork != null ? artwork.License : (!isArtwork && music != null ? music.License : "N/A"))</strong>
+                                 </p>
+                                @if (!isArtwork && music != null)
+                                {
+                                     <audio controls class="mb-3 w-100">
+                                         <source src="@music.FileURL" type="audio/mpeg" />
+                                         Your browser does not support the audio element.
+                                     </audio>
+                                }
+                                @if (isArtwork && artwork != null) // Link for Artwork Details
+                                {
+                                     <a href="@Url.Action("Details", new { id = artwork.ArtworkID, type = "art" })" 
+                                        class="btn btn-primary w-100">View Details</a>
+                                }
+                                else if (!isArtwork && music != null) // Link for Music Details
+                                {
+                                    <a href="@Url.Action("Details", new { id = music.TrackID, type = "music" })" 
+                                       class="btn btn-primary w-100">View Details</a>
+                                }
+                            </div>
+                        }
                     </div>
                 </div>
-            </div>
+            }
         }
     </div>
 </div> 
