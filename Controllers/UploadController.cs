@@ -128,16 +128,23 @@ namespace IndieArtMarketplace.Controllers
                             _logger.LogInformation("Created uploads directory at {Path}", uploads);
                         }
 
-                        var fileName = $"{Guid.NewGuid()}_{Path.GetFileName(viewModel.File.FileName)}";
-                        var filePath = Path.Combine(uploads, fileName);
+                        // Sanitize filename: convert to lowercase, replace spaces with hyphens, remove invalid chars
+                        var originalFileName = Path.GetFileNameWithoutExtension(viewModel.File.FileName);
+                        var fileExtension = Path.GetExtension(viewModel.File.FileName);
+                        var sanitizedFileName = string.Join("-", originalFileName.Split(Path.GetInvalidFileNameChars()))
+                                                .Replace(" ", "-")
+                                                .ToLowerInvariant();
+                        var uniqueFileName = $"{Guid.NewGuid()}_{sanitizedFileName}{fileExtension}";
+                        
+                        var filePath = Path.Combine(uploads, uniqueFileName);
                         
                         using (var stream = new FileStream(filePath, FileMode.Create))
                         {
                             await viewModel.File.CopyToAsync(stream);
                         }
                         
-                        fileUrl = "/uploads/" + fileName;
-                        _logger.LogInformation("Successfully saved file to {Path} with name {FileName}", filePath, fileName);
+                        fileUrl = "/uploads/" + uniqueFileName;
+                        _logger.LogInformation("Successfully saved file to {Path} with name {FileName}", filePath, uniqueFileName);
                     }
                     catch (Exception ex)
                     {
@@ -333,17 +340,24 @@ namespace IndieArtMarketplace.Controllers
                     Directory.CreateDirectory(uploadsDir);
                 }
 
-                var fileName = $"{Guid.NewGuid()}_{viewModel.File.FileName}";
-                var filePath = Path.Combine(uploadsDir, fileName);
+                // Sanitize filename: convert to lowercase, replace spaces with hyphens, remove invalid chars
+                var originalMusicFileName = Path.GetFileNameWithoutExtension(viewModel.File.FileName);
+                var musicFileExtension = Path.GetExtension(viewModel.File.FileName);
+                var sanitizedMusicFileName = string.Join("-", originalMusicFileName.Split(Path.GetInvalidFileNameChars()))
+                                            .Replace(" ", "-")
+                                            .ToLowerInvariant();
+                var uniqueMusicFileName = $"{Guid.NewGuid()}_{sanitizedMusicFileName}{musicFileExtension}";
+
+                var filePath = Path.Combine(uploadsDir, uniqueMusicFileName);
 
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
                     await viewModel.File.CopyToAsync(stream);
                 }
 
-                _logger.LogInformation("File saved successfully at {Path} with name {FileName}", filePath, fileName);
+                _logger.LogInformation("File saved successfully at {Path} with name {FileName}", filePath, uniqueMusicFileName);
 
-                var fileUrl = $"/uploads/{fileName}";
+                var fileUrl = $"/uploads/{uniqueMusicFileName}";
                 var musicTrack = new MusicTrack
                 {
                     ArtistID = userId,
