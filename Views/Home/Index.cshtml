@@ -17,7 +17,7 @@
                 <i class="fab fa-instagram"></i> <a href="https://www.instagram.com/indieartmarketplace/" target="_blank">@@indieartmarketplace</a>
             </div>
         </div>
-        <div class="col-md-6 d-none d-md-block">
+        <div class="col-md-6">
             <img src="~/images/02-blur.png" alt="Artwork 1" class="fade-in-image blur-image">
             <img src="~/images/02-raiden.png" alt="Artwork 2" class="fade-in-image raiden-image">
         </div>
@@ -70,9 +70,17 @@
     @@media (max-width: 768px) {
         .fade-in-image {
             max-width: 80vw;
+            position: relative;
+            margin: 2rem auto;
+            display: block;
         }
+        
+        .blur-image {
+            margin-bottom: -50%;
+        }
+        
         main.pb-3 {
-             padding-bottom: 100px;
+            padding-bottom: 100px;
         }
     }
 </style>
