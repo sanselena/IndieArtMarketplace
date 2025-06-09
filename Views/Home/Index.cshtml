@@ -26,6 +26,12 @@
     </div>
 </div>
 
+<div class="feedback-button-container">
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSfrsD3mT8s22OKdMQNOFs04Id29umu-rSq27rsxwCctnMgj7Q/viewform?usp=sharing&ouid=104965079882661461036" target="_blank" class="feedback-button">
+        Share your feedback!
+    </a>
+</div>
+
 <style>
     .fade-in-image {
         opacity: 0;
@@ -95,6 +101,44 @@
         
         main.pb-3 {
             padding-bottom: 100px;
+        }
+    }
+
+    .feedback-button-container {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 1000;
+    }
+
+    .feedback-button {
+        display: inline-block;
+        padding: 12px 24px;
+        background: linear-gradient(135deg, #a700ff, #ff3ec8);
+        color: white;
+        text-decoration: none;
+        border-radius: 25px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 500;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .feedback-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+        color: white;
+    }
+
+    @@media (max-width: 768px) {
+        .feedback-button-container {
+            bottom: 15px;
+            right: 15px;
+        }
+
+        .feedback-button {
+            padding: 10px 20px;
+            font-size: 0.9rem;
         }
     }
 </style>
