@@ -63,7 +63,7 @@ namespace IndieArtMarketplace.Controllers
         }
 
         [HttpPost]
-        public IActionResult Register(User user)
+        public async Task<IActionResult> Register(User user)
         {
             if (_userService.GetUserByEmailOrUsername(user.Email) != null ||
                 _userService.GetUserByEmailOrUsername(user.Username) != null)
@@ -73,7 +73,7 @@ namespace IndieArtMarketplace.Controllers
             }
             if (ModelState.IsValid)
             {
-                _userService.CreateUser(user);
+                await _userService.CreateUser(user);
                 return RedirectToAction("Login");
             }
             return View(user);

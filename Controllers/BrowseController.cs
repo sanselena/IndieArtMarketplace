@@ -3,6 +3,7 @@ using IndieArtMarketplace.Business.Services;
 using IndieArtMarketplace.Models;
 using System.Linq;
 using System;
+using System.Threading.Tasks;
 
 namespace IndieArtMarketplace.Controllers
 {
@@ -73,7 +74,7 @@ namespace IndieArtMarketplace.Controllers
         }
 
         [HttpGet]
-        public IActionResult Purchase(int id, string type)
+        public async Task<IActionResult> Purchase(int id, string type)
         {
             // Placeholder for getting the current user ID from session
             // You'll need to implement user authentication and session management
@@ -117,7 +118,7 @@ namespace IndieArtMarketplace.Controllers
                 Status = "Completed"
             };
 
-            _userService.CreateTransaction(transaction);
+            await _userService.CreateTransaction(transaction);
 
             // Redirect to a success page
             return RedirectToAction("PurchaseSuccess");
