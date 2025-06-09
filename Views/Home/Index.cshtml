@@ -18,8 +18,10 @@
             </div>
         </div>
         <div class="col-md-6">
-            <img src="~/images/02-blur.png" alt="Artwork 1" class="fade-in-image blur-image">
-            <img src="~/images/02-raiden.png" alt="Artwork 2" class="fade-in-image raiden-image">
+            <div class="image-container">
+                <img src="~/images/02-blur.png" alt="Artwork 1" class="fade-in-image blur-image">
+                <img src="~/images/02-raiden.png" alt="Artwork 2" class="fade-in-image raiden-image">
+            </div>
         </div>
     </div>
 </div>
@@ -68,20 +70,26 @@
     }
 
     @@media (max-width: 768px) {
-        .fade-in-image {
-            max-width: 80vw;
+        .image-container {
             position: relative;
-            margin: 0 auto;
-            display: block;
+            height: 300px;
+            margin-top: 2rem;
+        }
+
+        .fade-in-image {
+            position: absolute;
+            max-width: 80vw;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
         }
         
         .blur-image {
-            margin-bottom: -50%;
-            transform: translateY(-2rem);
+            z-index: 1;
         }
         
         .raiden-image {
-            transform: translateY(-2rem);
+            z-index: 2;
         }
         
         main.pb-3 {
