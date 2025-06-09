@@ -36,6 +36,7 @@ namespace IndieArtMarketplace.Business.Services
             try
             {
                 user.RegistrationDate = DateTime.UtcNow; // Ensure UTC time
+                user.UserID = 0; // Reset UserID to let the database generate it
                 _context.Users.Add(user);
                 await _context.SaveChangesAsync();
                 return user;
